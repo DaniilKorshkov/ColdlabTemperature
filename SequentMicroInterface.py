@@ -23,7 +23,32 @@ def RecordTemperatureToLog():
     current_temp = ReadAllTemperatures()
     
     handle = open("MainLog","a")
-    handle.write(f"{current_time}\t{current_temp}\n")
+    handle.write(f"{current_temp}")
     handle.close()
+    
+    
+
+def ReadVoltage(board_id, sensor_number):
+    ret = str(subprocess.run([f"megaind", f"{board_id}", f"uoutrd", f"{sensor_number}"], capture_output=True).stdout)
+    ret = float(ret[2:(len(ret)-3)])
+    
+    return ret
+    
+    
+def ReadAllVoltages():
+    ret = ""
+    for i in range(2):
+        for j in range(4):
+                ret = ret+"\t"+str(ReadVoltage(i*4,(j+1)))
+    ret = ret.strip("\t")
+    return ret
+
+
+def RecordVoltageToLog():
+    current_volt = ReadAllVoltages()
+    handle = open("MainLog","a")
+    handle.write(f"{current_volt}")
+    handle.close()
+    
 
 
