@@ -1,8 +1,12 @@
 import SequentMicroInterface as sm
 import time
 import datetime
+import CreateNewFile
 
 def main():
+    
+    filename = CreateNewFile.MakeNewFile()
+    
 
     while True:
         try:
@@ -17,16 +21,16 @@ def main():
     while True:
         current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
         
-        handle = open("MainLog","a")
+        handle = open(filename,"a")
         handle.write(f"{current_time}\t\t")
         handle.close()
         
-        sm.RecordTemperatureToLog()
-        handle = open("MainLog","a")
+        sm.RecordTemperatureToLog(filename)
+        handle = open(filename,"a")
         handle.write(f"\t\t")
         handle.close()
-        sm.RecordVoltageToLog()
-        handle = open("MainLog","a")
+        sm.RecordVoltageToLog(filename)
+        handle = open(filename,"a")
         handle.write(f"\n")
         handle.close()
         time.sleep(interval)

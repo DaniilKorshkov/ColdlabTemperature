@@ -18,11 +18,11 @@ def ReadAllTemperatures():
     return ret
         
 
-def RecordTemperatureToLog():
+def RecordTemperatureToLog(filename):
     current_time = datetime.datetime.now().strftime("%Y-%h-%d %H:%M:%S")
     current_temp = ReadAllTemperatures()
     
-    handle = open("MainLog","a")
+    handle = open(filename,"a")
     handle.write(f"{current_temp}")
     handle.close()
     
@@ -44,9 +44,9 @@ def ReadAllVoltages():
     return ret
 
 
-def RecordVoltageToLog():
+def RecordVoltageToLog(filename):
     current_volt = ReadAllVoltages()
-    handle = open("MainLog","a")
+    handle = open(filename,"a")
     handle.write(f"{current_volt}")
     handle.close()
     
