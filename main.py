@@ -7,7 +7,10 @@ import JSONoperators as js
 
 def main():
     
+    plt.close('all')
+    
     filename = CreateNewFile.MakeNewFile()
+    dodisplaygraphs = js.ReadJSONConfig("RTD_options","showgraphs")
     
 
     while True:
@@ -19,24 +22,45 @@ def main():
             print("Not a valid integer")
 
 
-    temperaturearrays=[]
-    for i in js.ReadJSONConfig("RTD_options","currently_processed_ports"):
-        temperaturearrays.append([])
-    pressurearrays = []
-    for i in range(8):
-        pressurearrays.append([])
+
         
-    x = 0
-    x_ax = []
+    if dodisplaygraphs == "True":
         
-    
-    tempfig = plt.figure()
-    tempax = tempfig.add_subplot(111)
-    tempfig.show()
-    
-    pressfig = plt.figure()
-    pressax = pressfig.add_subplot(111)
-    pressfig.show()
+        temperaturelegend = []
+        pressurelegend = []
+        
+        
+        temperaturearrays=[]
+        for i in js.ReadJSONConfig("RTD_options","currently_processed_ports"):
+            temperaturearrays.append([])
+            temperaturelegend.append([i])
+        pressurearrays = []
+        for i in range(8):
+            pressurearrays.append([])
+            pressurelegend.append([i+1])
+        
+        
+        
+        x = 0
+        x_ax = []
+        
+        colorlist = ['r','g','b','c','m','y','k','tab:brown']
+        
+       
+       
+            
+        
+            
+        
+        tempfig = plt.figure()
+        tempax = tempfig.add_subplot(111)
+        tempax.set_title("Temperature")
+        tempfig.show()
+        
+        pressfig = plt.figure()
+        pressax = pressfig.add_subplot(111)
+        pressax.set_title("Pressure")
+        pressfig.show()
     
     
     while True:
@@ -51,31 +75,46 @@ def main():
         handle.write(f"\t\t")
         handle.close()
         
-        for i in range(len(temperaturelist)):
-            temperaturearrays[i].append(temperaturelist[i])
         
         pressurelist = sm.RecordVoltageToLog(filename)
         handle = open(filename,"a")
         handle.write(f"\n")
         handle.close()
         
-        for i in range(len(pressurelist)):
-            pressurearrays[i].append(pressurelist[i])
-        
-        x = x+1
-        x_ax.append(x)
-        
-        for array in temperaturearrays:
-            tempax.plot(x_ax,array,color="b")
+        if dodisplaygraphs == "True":
             
-       
-        for array in pressurearrays:
-            pressax.plot(x_ax,array,color="b")
+            for i in range(len(temperaturelist)):
+                temperaturearrays[i].append(temperaturelist[i])
+            
+            for i in range(len(pressurelist)):
+                pressurearrays[i].append(pressurelist[i])
+            
+            x = x+1
+            x_ax.append(x)
             
             
-        tempfig.canvas.draw()
-        pressfig.canvas.draw()
+            i = 0
         
+            for array in temperaturearrays:
+                tempax.plot(x_ax,array,color=colorlist[i])
+                
+                i += 1
+                
+            j = 0
+            for array in pressurearrays:
+                pressax.plot(x_ax,array,color=colorlist[j])
+                
+                j += 1
+            
+            
+            tempax.legend(temperaturelegend)
+            pressax.legend(pressurelegend)
+            
+            
+                
+            tempfig.canvas.draw()
+            pressfig.canvas.draw()
+            
         
         time.sleep(interval)
         
