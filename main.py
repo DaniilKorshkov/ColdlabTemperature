@@ -11,6 +11,7 @@ def main():
     
     filename = CreateNewFile.MakeNewFile()
     dodisplaygraphs = js.ReadJSONConfig("RTD_options","showgraphs")
+    entriestodisplay = js.ReadJSONConfig("RTD_options","entriestodisplay")
     
 
     while True:
@@ -41,7 +42,6 @@ def main():
         
         
         
-        x = 0
         x_ax = []
         
         colorlist = ['r','g','b','c','m','y','k','tab:brown']
@@ -54,12 +54,10 @@ def main():
         
         tempfig = plt.figure()
         tempax = tempfig.add_subplot(111)
-        tempax.set_title("Temperature")
         tempfig.show()
         
         pressfig = plt.figure()
         pressax = pressfig.add_subplot(111)
-        pressax.set_title("Pressure")
         pressfig.show()
     
     
@@ -83,37 +81,54 @@ def main():
         
         if dodisplaygraphs == "True":
             
+            
+            
             for i in range(len(temperaturelist)):
                 temperaturearrays[i].append(temperaturelist[i])
+                if len(temperaturearrays[i]) > entriestodisplay:
+                    void = (temperaturearrays[i]).pop(0)
             
             for i in range(len(pressurelist)):
                 pressurearrays[i].append(pressurelist[i])
+                if len(pressurearrays[i]) > entriestodisplay:
+                    void = (pressurearrays[i]).pop(0)
             
-            x = x+1
-            x_ax.append(x)
+            
+            x_ax.append(datetime.datetime.now())
+            
+            if len(x_ax) > entriestodisplay:
+                void = x_ax.pop(0)
+                
+                
             
             
             i = 0
-        
+            tempax.cla()
+            tempax.set_title("Temperature (oC vs time)")
             for array in temperaturearrays:
+                
                 tempax.plot(x_ax,array,color=colorlist[i])
                 
                 i += 1
                 
             j = 0
+            pressax.cla()
+            pressax.set_title("Pressure (kPa vs time)")
             for array in pressurearrays:
                 pressax.plot(x_ax,array,color=colorlist[j])
                 
                 j += 1
             
             
-            tempax.legend(temperaturelegend)
-            pressax.legend(pressurelegend)
+            tempax.legend(temperaturelegend,loc=3)
+            pressax.legend(pressurelegend,loc=3)
             
             
                 
             tempfig.canvas.draw()
             pressfig.canvas.draw()
+            
+            
             
         
         time.sleep(interval)
