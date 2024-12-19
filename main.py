@@ -4,10 +4,16 @@ import datetime
 import CreateNewFile
 import matplotlib.pyplot as plt
 import JSONoperators as js
+import atexit
+import signal
+import sys
+
 
 def main():
     
-    plt.close('all')
+    atexit.register(exit_handler)
+    signal.signal(signal.SIGINT, kill_handler)
+    signal.signal(signal.SIGTERM, kill_handler)
     
     filename = CreateNewFile.MakeNewFile()
     dodisplaygraphs = js.ReadJSONConfig("RTD_options","showgraphs")
@@ -16,23 +22,28 @@ def main():
 
     while True:
         try:
-            interval = int(input("Enter interval in seconds: "))
+            interval = int(input(f"Enter interval in seconds: "))
             assert interval > 0
             break
         except:
-            print("Not a valid integer")
+            print(f"Not a valid integer")
+            
+            
+    print(f"To terminate the process, please use Ctrl+C")
 
 
 
         
     if dodisplaygraphs == "True":
         
+        
+        
         temperaturelegend = []
         pressurelegend = []
         
         
         temperaturearrays=[]
-        for i in js.ReadJSONConfig("RTD_options","currently_processed_ports"):
+        for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_ports"):
             temperaturearrays.append([])
             temperaturelegend.append([i])
         pressurearrays = []
@@ -59,6 +70,8 @@ def main():
         pressfig = plt.figure()
         pressax = pressfig.add_subplot(111)
         pressfig.show()
+        
+        
     
     
     while True:
@@ -104,7 +117,7 @@ def main():
             
             i = 0
             tempax.cla()
-            tempax.set_title("Temperature (oC vs time)")
+            tempax.set_title(f"Temperature (oC vs time)")
             for array in temperaturearrays:
                 
                 tempax.plot(x_ax,array,color=colorlist[i])
@@ -113,7 +126,7 @@ def main():
                 
             j = 0
             pressax.cla()
-            pressax.set_title("Pressure (kPa vs time)")
+            pressax.set_title(f"Pressure (kPa vs time)")
             for array in pressurearrays:
                 pressax.plot(x_ax,array,color=colorlist[j])
                 
@@ -130,11 +143,17 @@ def main():
             
             
             
+            
         
         time.sleep(interval)
+    
         
         
+def exit_handler():
+    plt.close('all')
 
+def kill_handler(*args):
+    sys.exit(0)
 
 
 main()
