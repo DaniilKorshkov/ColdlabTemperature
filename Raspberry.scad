@@ -158,3 +158,80 @@ translate([61.76,3.48,1.6])
 cylinder(h = beam_h, r = beam_r);
 translate([61.76,52.14,1.6])
 cylinder(h = beam_h, r = beam_r);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+StandardThickness = 2.5;
+StandardGap = 0.5;
+CaseDisplacement = [(-2.52-1-StandardThickness),(-1-StandardThickness),-(6.5+StandardThickness)];
+
+Bottom = [(85.10+2.52+2*StandardThickness+2), (56.10+2*StandardThickness+2), StandardThickness];
+translate(CaseDisplacement)
+cube(Bottom);
+
+BottomWall1 = [(85.10+2.52+2*StandardThickness+2),StandardThickness,(6.5+StandardThickness)];
+translate(CaseDisplacement)
+cube(BottomWall1);
+
+RearWall = [(85.10+2.52+2*StandardThickness+2),StandardThickness,(6.5+StandardThickness+1.6+1.7*2+18.84*3+1.7+15)];
+
+RearWalldisplacement = [0,(56.10+2*StandardThickness+2),0];
+
+GPIO2xhole = [9,(2*StandardThickness),12];
+
+
+
+
+BottomWall3 = [StandardThickness,(56.10+2*StandardThickness+2),(6.5+StandardThickness+19.4)];
+translate(CaseDisplacement)
+cube(BottomWall3);
+
+BottomWall4 = [StandardThickness,(56.10+2*StandardThickness+2),(6.5+StandardThickness)];
+BottomWall4displacement = [(85.10+2.52+StandardThickness+2),0,0];
+translate(CaseDisplacement)
+translate(BottomWall4displacement)
+cube(BottomWall4);
+
+
+
+
+difference()
+{
+    translate(CaseDisplacement)
+    translate(RearWalldisplacement)
+  cube(RearWall);
+    
+    
+    translate([(71.12-StandardGap),(56.10+StandardThickness),(39.1-StandardGap)])
+    cube(GPIO2xhole);
+    
+    translate([(71.12-StandardGap),(56.10+StandardThickness),(39.1+18.84+1.7-StandardGap)])
+    cube(GPIO2xhole);
+
+}
