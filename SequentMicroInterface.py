@@ -21,15 +21,15 @@ def ReadAllTemperatures():
     return ret, temperaturearray
         
 
-def RecordTemperatureToLog(filename):
+def RecordTemperatureToLog(current_temp, filename):
     current_time = datetime.datetime.now().strftime("%Y-%h-%d %H:%M:%S")
-    current_temp, temperaturearray = ReadAllTemperatures()
+    #current_temp, temperaturearray = ReadAllTemperatures()
     
     handle = open(filename,"a")
     handle.write(f"{current_temp}")
     handle.close()
     
-    return temperaturearray
+    #return temperaturearray
 
 def ReadVoltage(board_id, sensor_number):
     ret = str(subprocess.run([f"megaind", f"{board_id}", f"uoutrd", f"{sensor_number}"], capture_output=True).stdout)
@@ -53,12 +53,12 @@ def ReadAllVoltages():
     return ret, pressurearray
 
 
-def RecordVoltageToLog(filename):
-    current_volt, pressurearray = ReadAllVoltages()
+def RecordVoltageToLog(current_volt, filename):
+    #current_volt, pressurearray = ReadAllVoltages()
     handle = open(filename,"a")
     handle.write(f"{current_volt}")
     handle.close()
-    return pressurearray
+    #return pressurearray
     
 
 

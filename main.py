@@ -18,15 +18,18 @@ def main():
     filename = CreateNewFile.MakeNewFile()
     dodisplaygraphs = js.ReadJSONConfig("RTD_options","showgraphs")
     entriestodisplay = js.ReadJSONConfig("RTD_options","entriestodisplay")
+    refreshtime = js.ReadJSONConfig("RTD_options","refreshtime")
     
 
     while True:
         try:
-            interval = int(input(f"Enter interval in seconds: "))
+            interval = int(input(f"Enter record interval in seconds: "))
             assert interval > 0
             break
         except:
             print(f"Not a valid integer")
+        
+        
             
             
     print(f"To terminate the process, please use Ctrl+C")
@@ -71,6 +74,11 @@ def main():
         pressax = pressfig.add_subplot(111)
         pressfig.show()
         
+    refreshtick = int(interval/refreshtime)
+    if refreshtick < 1:
+        refreshtick = 1
+    refreshcounter = refreshtick
+        
         
     
     
@@ -81,16 +89,25 @@ def main():
         handle.write(f"{current_time}\t\t")
         handle.close()
         
-        temperaturelist = sm.RecordTemperatureToLog(filename)
+        tempertaurelogentry, temperaturelist = sm.ReadAllTemperatures()
+        #temperaturelist = sm.RecordTemperatureToLog(filename)
         handle = open(filename,"a")
         handle.write(f"\t\t")
         handle.close()
         
         
-        pressurelist = sm.RecordVoltageToLog(filename)
+        pressurelogentry, pressurelist = sm.ReadAllVoltages()
+        #pressurelist = sm.RecordVoltageToLog(filename)
         handle = open(filename,"a")
         handle.write(f"\n")
         handle.close()
+        
+        if refreshcounter >= refreshtick:
+            refreshcounter = 0
+            sm.RecordTemperatureToLog(tempertaurelogentry, filename)
+            sm.RecordVoltageToLog(pressurelogentry, filename)
+        refreshcounter += 1
+        
         
         if dodisplaygraphs == "True":
             
@@ -145,7 +162,8 @@ def main():
             
             
         
-        time.sleep(interval)
+        #time.sleep(interval)
+        time.sleep(refreshtime)
     
         
         
