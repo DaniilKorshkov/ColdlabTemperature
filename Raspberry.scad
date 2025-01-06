@@ -247,9 +247,14 @@ translate([61.76,52.14,-0.5])
 cylinder(r=(2.83+PlasticThickness+1),h=PlasticThickness+1);
     
 VentLength = 30;
-for(i=[15:10:55])
-translate([i,(28.05+PlasticThickness+StandardGap-VentLength/2),-0.5])
-cube([5,VentLength,PlasticThickness+1]);   
+for(i=[15:5:55])
+translate([i+1,(28.05+1+PlasticThickness+StandardGap-VentLength/2),-0.5])
+
+minkowski(){
+cube([0.5,VentLength-2,PlasticThickness+1]);
+cylinder(h=10,r=1,$fn=100);    
+
+};   
 
 SDCardGapWidth = 15;
 translate([-0.5,(28.05+PlasticThickness+StandardGap-SDCardGapWidth/2),-0.5])
@@ -341,37 +346,65 @@ cube(MainWall);
 
 VentHeight = 27.5;
 
-for(i=[15:10:55]){
-translate([i,-0.5,10])
-cube([5,PlasticThickness+1,VentHeight]);
+for(i=[15:5:55]){
+translate([i+1,-0.5,10+1])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);
 };
-for(i=[15:10:55]){
+};
+for(i=[15:5:55]){
     
-    translate([i,-0.5,42.5])
-cube([5,PlasticThickness+1,VentHeight]);};
+    
+    translate([i+1,-0.5,42.5+1])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);
+};
 
-translate([75,-0.5,10])
-cube([5,PlasticThickness+1,VentHeight]);
-translate([85,-0.5,10])
-cube([5,PlasticThickness+1,VentHeight]);
+translate([75+1,-0.5,10+1])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);};
+translate([80+1,-0.5,10+1])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);};
+translate([85+1,-0.5,10+1])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);};
 
 GPIO2gapxwidth = 1;
 GPIO2gapheight = 14;
 GPIO2gaplowerdisplacement = 5;
 
-GPIO2gap = [(8.34+2*GPIO2gapxwidth),PlasticThickness+1,GPIO2gapheight];
-translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth),-0.5,(42.68+5.5+PlasticThickness-GPIO2gaplowerdisplacement)])
+GPIO2gap = [(8.34+2*GPIO2gapxwidth-2),PlasticThickness+1,(GPIO2gapheight-2)];
+translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth+1),-0.5,(42.68+5.5+PlasticThickness-GPIO2gaplowerdisplacement+1)])
 
+minkowski(){
 cube(GPIO2gap);
-
-
-translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth),-0.5,(63.22+5.5+PlasticThickness-GPIO2gaplowerdisplacement)])
-
-cube(GPIO2gap);
-
-
-    
+    rotate([90,0,0])
+cylinder(h=10,r=1,$fn=100);
 };
+
+translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth+1),-0.5,(63.22+5.5+PlasticThickness-GPIO2gaplowerdisplacement+1)])
+
+minkowski(){
+cube(GPIO2gap);
+    rotate([90,0,0])
+cylinder(h=10,r=1,$fn=100);
+};
+
+};
+};
+    
+
 
 VerticalBeam = [4,4,85];
 translate([((3.38+StandardGap+PlasticThickness-2)),-2,0])
@@ -388,12 +421,12 @@ cube(HorizontalBeam);
 height = 3;
 width = 1.5;
 
-translate([(85.10+2*PlasticThickness+2*StandardGap-4),-2.5,38])
-polyhedron(points=[ [0,0,0],[0,0,4],[0,4,4],[0,4,0],[width,0,height],[width,0,(7+height)],[width,4,(7+height)],[width,4,height] ], faces = [[3,2,1,0],[0,1,5,4],[2,3,7,6],[1,2,6,5],[5,6,7,4],[3,0,4,7]]);
+
 
 
 translate([-1,0,41])
 cube([1,PlasticThickness,44]);
+
 
 };
 
@@ -403,9 +436,14 @@ difference() {
 
 cube([PlasticThickness,(56.10+2*PlasticThickness+2*StandardGap),28]);
     SDCardGapWidth = 15;
-translate([-0.5,(28.05+PlasticThickness+StandardGap-SDCardGapWidth/2),-0.5])
-cube([4,SDCardGapWidth,15]);
+    
 
+translate([-0.5,(28.05+3+PlasticThickness+StandardGap-SDCardGapWidth/2),-0.5])
+minkowski(){
+cube([4,SDCardGapWidth-6,15]);
+rotate([0,90,0])
+cylinder(r=3,h=4,$fn=100);
+};
 
     
 };
@@ -430,24 +468,41 @@ cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,28]);
 
 PortGap=2.25;
 
-TypeCGap = [(9.01+2*PortGap),PlasticThickness+1,(3.32+2*PortGap)];   
+TypeCGap = [(9.01+2*PortGap-2),PlasticThickness+1,(3.32+2*PortGap-2)];   
 
-translate([(PlasticThickness+StandardGap+6.68-PortGap),-0.5,(7.5+1.6-PortGap)])
+translate([(PlasticThickness+StandardGap+6.68-PortGap+1),-0.5,(7.5+1.6-PortGap+1)])
+minkowski(){
 cube(TypeCGap);
+rotate([90,0,0])
+cylinder(h=10,r=1,$fn=100);
+};
 
-MicroHDMIGap = [(6.64+2*PortGap),(PlasticThickness+1),(3.54+2*PortGap)];
+MicroHDMIGap = [(6.64+2*PortGap-2),(PlasticThickness+1),(3.54+2*PortGap-2)];
 
-translate([(StandardGap+PlasticThickness+22.34-PortGap),-0.5,(7.5+1.6-PortGap)])
+
+translate([(StandardGap+PlasticThickness+22.34-PortGap+1),-0.5,(7.5+1.6-PortGap+1)])
+minkowski(){
 cube(MicroHDMIGap);
+rotate([90,0,0])
+cylinder(h=10,r=1,$fn=100);
+};
     
-translate([(StandardGap+PlasticThickness+35.30-PortGap),-0.5,(7.5+1.6-PortGap)])
+translate([(StandardGap+PlasticThickness+35.30-PortGap+1),-0.5,(7.5+1.6-PortGap+1)])
+minkowski(){
 cube(MicroHDMIGap);
+rotate([90,0,0])
+cylinder(h=10,r=1,$fn=100);
+};
     
-JackGap = ([(7.06+2*PortGap),(PlasticThickness+1),(6.04+2*PortGap)]);
-translate([(50.58+PlasticThickness+StandardGap-PortGap),-0.5,(7.5-PortGap+1.6)])
-cube(JackGap);  
+JackGap = ([(7.06+2*PortGap-6),(PlasticThickness+1),(6.04+2*PortGap-6)]);
+translate([(50.58+PlasticThickness+StandardGap-PortGap+3),-0.5,(7.5-PortGap+1.6+3)])
+minkowski(){
+cube(JackGap);
+rotate([90,0,0])
+cylinder(h=10,r=3,$fn=100);
+};
+    
 
-    
 };
 
 difference(){
@@ -457,14 +512,25 @@ cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,20]);
 
 VentHeight=13;
 
-for(i=[15:10:45]){
+for(i=[15:5:45]){
 
         
-    translate([i,-0.5,28])
-cube([5,PlasticThickness+1,VentHeight]);};
+    translate([i+1,-0.5,29])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+    rotate([90,0,0])
+cylinder(h=10,r=1,$fn=100);
+    
+};
+    };
 
-translate([55,-0.5,28])
-cube([34,10,13]);
+translate([58,-0.5,31])
+minkowski(){
+cube([28,10,7]);
+rotate([90,0,0])
+cylinder(h=10,r=3,$fn=100);
+};
+
 
 };
 };
@@ -476,8 +542,7 @@ cube([7,7,48]);
 translate([0,-5,41])
 cube([7,7,44]);
 
-translate([4.5,0,41])
-cube([2.5,(56.10+PlasticThickness+2*StandardGap+7),7]);    
+   
 
 polyhedron(points=[ [0,0,0],[7,0,0],[0,0,41],[7,0,41],[0,-5,41],[7,-5,41] ],faces=[ [0,2,4],[1,5,3],[1,3,2,0],[0,4,5,1],[2,3,5,4] ]);
     
@@ -532,7 +597,7 @@ NutHolder();
 
 module CentralFrontBeam(){
 
-cube([(85.10+2*PlasticThickness+2*StandardGap),4,7]);
+cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,7]);
 
 };
 
@@ -589,8 +654,7 @@ RightBeam();
 translate([0,-6.5,0])    
 LeftBeam();
 
-translate([0,-4,41])
-CentralFrontBeam();    
+   
 
 translate([((85.10+2*PlasticThickness+2*StandardGap-7)),(56.10+PlasticThickness+2*StandardGap),0])
 RightRearBeam();    
@@ -700,12 +764,10 @@ cube([5,(outer_offset-inner_offset),PlasticThickness+1]);
 
 };
 
-RaspberryWithHats();
+
 
 
 translate([-(PlasticThickness+StandardGap),-(PlasticThickness+StandardGap),-8])
 Enclosure();
 
-translate([-(PlasticThickness+StandardGap+8),-(PlasticThickness+StandardGap+11.5),77.5])
-TopCover();
-
+translate([-(PlasticThickness+StandardGap+8),-(PlasticThickness+StandardGap+11.5),77.5]);
