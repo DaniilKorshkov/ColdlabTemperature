@@ -344,7 +344,7 @@ MainWall = ([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,85]);
 
 cube(MainWall);
 
-VentHeight = 27.5;
+VentHeight = 9.75;
 
 for(i=[15:5:55]){
 translate([i+1,-0.5,10+1])
@@ -353,39 +353,55 @@ cube([0.5,PlasticThickness+1,VentHeight-2]);
 rotate([90,0,0])
 cylinder(h=3.5,r=1,$fn=100);
 };
-};
-for(i=[15:5:55]){
-    
-    
-    translate([i+1,-0.5,42.5+1])
+
+translate([i+1,-0.5,27.75])
 minkowski(){
 cube([0.5,PlasticThickness+1,VentHeight-2]);
 rotate([90,0,0])
 cylinder(h=3.5,r=1,$fn=100);
 };
 
-translate([75+1,-0.5,10+1])
+
+translate([i+1,-0.5,61.25])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);
+};
+
+translate([i+1,-0.5,42.5+1])
+minkowski(){
+cube([0.5,PlasticThickness+1,VentHeight-2]);
+rotate([90,0,0])
+cylinder(h=3.5,r=1,$fn=100);
+};
+
+};
+    
+    
+    
+for(i=[76:5:86]){
+
+translate([i,-0.5,10+1])
 minkowski(){
 cube([0.5,PlasticThickness+1,VentHeight-2]);
 rotate([90,0,0])
 cylinder(h=3.5,r=1,$fn=100);};
-translate([80+1,-0.5,10+1])
+
+translate([i,-0.5,27.75])
 minkowski(){
 cube([0.5,PlasticThickness+1,VentHeight-2]);
 rotate([90,0,0])
 cylinder(h=3.5,r=1,$fn=100);};
-translate([85+1,-0.5,10+1])
-minkowski(){
-cube([0.5,PlasticThickness+1,VentHeight-2]);
-rotate([90,0,0])
-cylinder(h=3.5,r=1,$fn=100);};
+
+};
 
 GPIO2gapxwidth = 1;
 GPIO2gapheight = 14;
 GPIO2gaplowerdisplacement = 5;
 
 GPIO2gap = [(8.34+2*GPIO2gapxwidth-2),PlasticThickness+1,(GPIO2gapheight-2)];
-translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth+1),-0.5,(42.68+5.5+PlasticThickness-GPIO2gaplowerdisplacement+1)])
+translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth+1+1.17),-0.5,(42.68+5.5+PlasticThickness-GPIO2gaplowerdisplacement+1)])
 
 minkowski(){
 cube(GPIO2gap);
@@ -393,7 +409,7 @@ cube(GPIO2gap);
 cylinder(h=10,r=1,$fn=100);
 };
 
-translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth+1),-0.5,(63.22+5.5+PlasticThickness-GPIO2gaplowerdisplacement+1)])
+translate([(71.12+PlasticThickness+StandardGap-GPIO2gapxwidth+1+1.17),-0.5,(63.22+5.5+PlasticThickness-GPIO2gaplowerdisplacement+1)])
 
 minkowski(){
 cube(GPIO2gap);
@@ -401,7 +417,7 @@ cube(GPIO2gap);
 cylinder(h=10,r=1,$fn=100);
 };
 
-};
+
 };
     
 
@@ -434,7 +450,7 @@ module BottomLeftWall(){
 
 difference() {
 
-cube([PlasticThickness,(56.10+2*PlasticThickness+2*StandardGap),28]);
+cube([PlasticThickness,(56.10+2*PlasticThickness+2*StandardGap),26]);
     SDCardGapWidth = 15;
     
 
@@ -464,7 +480,7 @@ cube([PlasticThickness,(56.10+2*PlasticThickness+2*StandardGap),9]);
 module BottomFrontWall(){
 
 difference(){
-cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,28]);
+cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,46]);
 
 PortGap=2.25;
 
@@ -487,7 +503,7 @@ rotate([90,0,0])
 cylinder(h=10,r=1,$fn=100);
 };
     
-translate([(StandardGap+PlasticThickness+35.30-PortGap+1),-0.5,(7.5+1.6-PortGap+1)])
+translate([(StandardGap+PlasticThickness+35.30-PortGap+1.5),-0.5,(7.5+1.6-PortGap+1)])
 minkowski(){
 cube(MicroHDMIGap);
 rotate([90,0,0])
@@ -503,12 +519,8 @@ cylinder(h=10,r=3,$fn=100);
 };
     
 
-};
 
-difference(){
 
-translate([0,0,28])
-cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,20]);
 
 VentHeight=13;
 
@@ -524,9 +536,9 @@ cylinder(h=10,r=1,$fn=100);
 };
     };
 
-translate([58,-0.5,31])
+translate([58,-0.5,29])
 minkowski(){
-cube([28,10,7]);
+cube([28,10,8]);
 rotate([90,0,0])
 cylinder(h=10,r=3,$fn=100);
 };
@@ -535,28 +547,30 @@ cylinder(h=10,r=3,$fn=100);
 };
 };
 
-
 module RightBeam(){
 
-cube([7,7,48]);
+cube([7,7,46]);
 translate([0,-5,41])
-cube([7,7,44]);
+difference(){
+polyhedron(points=[ [0,0,0],[0,7,0],[7,7,0],[7,0,0],[0,-5.5,44],[0,7,44],[12.5,7,44],[12.5,-5.5,44] ],faces=[ [3,2,1,0],[0,1,5,4],[3,0,4,7],[2,3,7,6],[1,2,6,5],[4,5,6,7] ]);
 
-   
+translate([6.25,0.75,40])
+cylinder(r=2.5,h=4.5,$fn=100);
+
+}; 
+
 
 polyhedron(points=[ [0,0,0],[7,0,0],[0,0,41],[7,0,41],[0,-5,41],[7,-5,41] ],faces=[ [0,2,4],[1,5,3],[1,3,2,0],[0,4,5,1],[2,3,5,4] ]);
     
-    
+
+  
     
 translate([3.25,-0.9,65])
 BottomSideSupport();    
 
-translate([3.5,(-1.5),85])
-cylinder(r=3,h=5,$fn=100);   
+  
 
-translate([3.5,-1.5,80])
-rotate(225)    
-NutHolder();    
+  
 
     
 };
@@ -569,26 +583,31 @@ NutHolder();
 
 module LeftBeam(){
     
-cube([7,7,48]);    
+cube([7,7,46]);    
 translate([-8,-5,41])
-cube([7,7,44]);
+
+difference(){
+polyhedron(points=[ [0,0,0],[0,7,0],[7,7,0],[7,0,0],[-5.5,-5.5,44],[-5.5,7,44],[7,7,44],[7,-5.5,44] ],faces=[ [3,2,1,0],[0,1,5,4],[3,0,4,7],[2,3,7,6],[1,2,6,5],[4,5,6,7] ]);
+    
+ translate([0.75,0.75,40])
+cylinder(r=2.5,h=4.5,$fn=100);
+    
+    
+};
 
 translate([-8,-5,41])
     
-polyhedron(points=[ [0,0,0],[0,7,0],[8,14,0],[15,14,0],[15,5,0],[7,0,0],[0,0,7],[0,7,7],[8,14,7],[15,14,7],[15,5,7],[7,0,7] ],faces=[ [5,4,3,2,1,0],[6,7,8,9,10,11],[5,0,6,11],[0,1,7,6],[1,2,8,7],[2,3,9,8],[3,4,10,9],[4,5,11,10]]);
+polyhedron(points=[ [0,0,0],[0,7,0],[8,14,0],[15,14,0],[15,5,0],[7,0,0],[0,0,5],[0,7,5],[8,14,5],[15,14,5],[15,5,5],[7,0,5] ],faces=[ [5,4,3,2,1,0],[6,7,8,9,10,11],[5,0,6,11],[0,1,7,6],[1,2,8,7],[2,3,9,8],[3,4,10,9],[4,5,11,10]]);
 translate([-8,-5,0])
 polyhedron(points=[ [8,5,0],[8,14,0],[15,14,0],[15,5,0],[7,0,0],[0,0,41],[0,7,41],[8,14,41],[15,14,41],[15,5,41],[7,0,41]],faces=[[3,2,1,0],[9,8,2,3],[3,10,9],[0,10,3],[8,7,1,2],[0,1,6,5],[0,5,10],[1,7,6],[5,6,7,8,9,10]]);
     
 translate([-4.7,-0.9,65])
 BottomSideSupport();
 
-translate([-4.5,(-1.5),85])
-cylinder(r=3,h=5,$fn=100);   
+  
 
 
-translate([-4.5,-1.5,80])
-rotate(135)    
-NutHolder();    
+
 
 
     
@@ -604,15 +623,15 @@ cube([(85.10+2*PlasticThickness+2*StandardGap),PlasticThickness,7]);
 
 module RightRearBeam(){
 
-cube([7,7,85]);
-    
-translate([3.5,3.5,85])
-cylinder(r=3,h=5,$fn=100);     
+cube([7,7,46]);
+translate([0,0,41])
+difference(){
+polyhedron(points=[ [0,0,0],[0,7,0],[7,7,0],[7,0,0],[0,0,44],[0,12.5,44],[12.5,12.5,44],[12.5,0,44] ],faces=[ [3,2,1,0],[0,1,5,4],[3,0,4,7],[2,3,7,6],[1,2,6,5],[4,5,6,7] ]); 
 
+translate([6.25,6.25,40])
+cylinder(r=2.5,h=4.5,$fn=100);
 
-translate([3.5,3.5,80])
-rotate(315)    
-NutHolder();    
+}; 
 
 };
 
@@ -621,21 +640,26 @@ module LeftRearBeam(){
 
 cube([7,7,48]);
 translate([-8,0,41])
-cube([7,7,44]);
+
+difference(){
+polyhedron(points=[ [0,0,0],[0,7,0],[7,7,0],[7,0,0],[-5.5,0,44],[-5.5,12.5,44],[7,12.5,44],[7,0,44] ],faces=[ [3,2,1,0],[0,1,5,4],[3,0,4,7],[2,3,7,6],[1,2,6,5],[4,5,6,7] ]);
+
+translate([0.75,6.25,40])
+cylinder(r=2.5,h=4.5,$fn=100);
+
+}    
+
 translate([-8,0,41])
 cube([15,7,7]);    
 
 polyhedron(points=[ [0,0,0],[0,7,0],[0,0,41],[0,7,41],[-8,0,41],[-8,7,41] ],faces=[[0,1,5,4],[1,3,5],[0,4,2],[1,0,2,3],[4,5,3,2]]);
 
 translate([-1,0,48])
-polyhedron(points=[ [0,0,0],[0,7,0],[8,7,0],[8,0,0],[0,0,37],[0,7,37] ],faces=[[3,2,1,0],[0,4,3],[1,2,5],[2,3,4,5],[0,1,5,4]]);
+polyhedron(points=[ [0,0,0],[0,7,0],[8,7,0],[8,0,0],[0,0,37],[0,12.5,37] ],faces=[[3,2,1,0],[0,4,3],[1,2,5],[2,3,4,5],[0,1,5,4]]);
 
-translate([-4.5,3.5,85])
-cylinder(r=3,h=5,$fn=100); 
 
-translate([-4.5,3.5,80])
-rotate(45)    
-NutHolder();    
+
+ 
 
 
 };
