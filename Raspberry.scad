@@ -691,27 +691,19 @@ LeftRearBeam();
 
 module TopScrewHolder(){
 
-translate([-4.95,0,0])
+translate([-3.5,-3.5,0])
 
-difference(){
-union(){
+
+
+    difference(){
+    cube([12.5,12.5,5]);
     
-    cube([9.9,7.65,5]);
-    translate([4.95,7.65,0])
-    cylinder(r=4.95,h=5,$fn=100);
+        translate([6.25,6.25,-0.5])
+        cylinder(r=2,h=6);
     
+    };
+   
 };    
-
-translate([4.95,7.65,2.5])
-cylinder(r=2.89,h=3.5,$fn=100);
-
-translate([4.95,7.65,-0.5])
-cylinder(r=1.5,h=6.5,$fn=100);
-
-};
-};
-
-
 
 module TopCover(){
 
@@ -721,21 +713,21 @@ MainTop = [(85.10+2*PlasticThickness+2*StandardGap+8), (56.10+2*PlasticThickness
 cube(MainTop);
 
 translate([3.5,3.5,0])
-rotate(135)
+rotate(135+45)
 TopScrewHolder();
 translate([3.5,(56.10+2*PlasticThickness+2*StandardGap+12.5),0])
-rotate(45)
+rotate(45+45)
 TopScrewHolder();
     
 translate([(85.10+2*PlasticThickness+2*StandardGap+8-3.5),(56.10+2*PlasticThickness+2*StandardGap+12.5),0])
-rotate(315)
+rotate(315+45)
 TopScrewHolder();
 
 translate([(85.10+2*PlasticThickness+2*StandardGap+8-3.5),3.5,0])
-rotate(225)
+rotate(225+45)
 TopScrewHolder();      
     
-translate([0.5,0,0])
+translate([3,0,0])
 cube([(85.10+2*PlasticThickness+2*StandardGap+8-1),3.5,5]);    
 translate([0.5,(56.10+2*PlasticThickness+2*StandardGap+12.5),0])
 cube([(85.10+2*PlasticThickness+2*StandardGap+8-1),3.5,5]);
@@ -743,55 +735,60 @@ cube([(85.10+2*PlasticThickness+2*StandardGap+8-1),3.5,5]);
 translate([0,0.5,0])
 cube([3.5,(56.10+2*PlasticThickness+2*StandardGap+16-1),5]);
 translate([(85.10+2*PlasticThickness+2*StandardGap+4.5),0.5,0])
-cube([3.5,(56.10+2*PlasticThickness+2*StandardGap+16-1),5]);    
+cube([3.5,(56.10+2*PlasticThickness+2*StandardGap+16-1),5]); 
 
-translate([3.5,3.5,0])    
-cylinder(r=4.7,h=5,$fn=100);
 
-translate([3.5,(56.10+2*PlasticThickness+2*StandardGap+16-3.5),0])    
-cylinder(r=4.7,h=5,$fn=100);
-
-translate([(85.10+2*PlasticThickness+2*StandardGap+8-3.5),(56.10+2*PlasticThickness+2*StandardGap+16-3.5),0])    
-cylinder(r=4.7,h=5,$fn=100);
-
-translate([(85.10+2*PlasticThickness+2*StandardGap+8-3.5),3.5,0])    
-cylinder(r=4.7,h=5,$fn=100);  
+  
 };
 
-translate([3.5,3.5,-0.5])    
-cylinder(r=3,h=6,$fn=100);
 
-translate([3.5,(56.10+2*PlasticThickness+2*StandardGap+16-3.5),-0.5])    
-cylinder(r=3,h=6,$fn=100);
 
-translate([(85.10+2*PlasticThickness+2*StandardGap+8-3.5),(56.10+2*PlasticThickness+2*StandardGap+16-3.5),-0.5])    
-cylinder(r=3,h=6,$fn=100);
 
-translate([(85.10+2*PlasticThickness+2*StandardGap+8-3.5),3.5,-0.5])    
-cylinder(r=3,h=6,$fn=100); 
+ 
 
 
 midpoint = (56.10+2*PlasticThickness+2*StandardGap+16)/2;
-outer_offset = 32.5;
-inner_offset = 2.5;
+outer_offset = 31.5;
+inner_offset = 3.5;
 
-for(i=[15:10:85]){
+for(i=[15.5:5:95.5]){
 translate([(i-2),(midpoint+inner_offset),-0.5])
-cube([5,(outer_offset-inner_offset),PlasticThickness+1]);
+minkowski(){
+cube([0.5,(outer_offset-inner_offset),PlasticThickness+1]);
+cylinder(h=10,r=1,$fn=100);
+  
+};
+
 
 translate([(i-2),(midpoint-outer_offset),-0.5])
-cube([5,(outer_offset-inner_offset),PlasticThickness+1]);
+minkowski(){
+cube([0.5,(outer_offset-inner_offset),PlasticThickness+1]);
+cylinder(h=10,r=1,$fn=100);
+
+};
     
 };
 
-};
+translate([0.75,0.75,-0.5])
+cylinder(r=2,h=6,$fn=100);
+translate([0.75,82.35,-0.5])
+cylinder(r=2,h=6,$fn=100);
+translate([103.35,0.75,-0.5])
+cylinder(r=2,h=6,$fn=100);
+translate([103.35,82.35,-0.5])
+cylinder(r=2,h=6,$fn=100);
+
+
 
 };
 
+};
 
 
 
-translate([-(PlasticThickness+StandardGap),-(PlasticThickness+StandardGap),-8])
-Enclosure();
 
-translate([-(PlasticThickness+StandardGap+8),-(PlasticThickness+StandardGap+11.5),77.5]);
+translate([-(PlasticThickness+StandardGap),-(PlasticThickness+StandardGap),-8]);
+
+
+translate([-(PlasticThickness+StandardGap+8),-(PlasticThickness+StandardGap+11.5),77])
+TopCover();
