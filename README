@@ -1,0 +1,6 @@
+To run program, type python3 main.py
+To interrupt, type Ctrl+C
+
+Pressure ports are defined from 0 to 7
+
+Exactly 8 polynomes are required in config to convert voltage to pressure

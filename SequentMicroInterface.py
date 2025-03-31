@@ -13,7 +13,7 @@ def ReadTemperature(sensor_number):
 def ReadAllTemperatures():
     ret = ""
     temperaturearray = []
-    for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_ports"):
+    for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports"):
         temperature = ReadTemperature(int(sensor_number))
         temperaturearray.append(float(temperature))
         ret = ret+"\t"+str(temperature)
@@ -42,12 +42,13 @@ def ReadAllVoltages():
     ret = ""
     pressurearray = []
     polynomes = js.ReadJSONConfig("Polynomes","polynomes")
-    for i in range(2):
-        for j in range(4):
-                voltage = ReadVoltage(i*4,(j+1))
-                pressure = ((polynomes[i*4+j])[0])*voltage + ((polynomes[i*4+j])[1])
-                pressurearray.append(pressure)
-                ret = ret+"\t"+str(pressure)
+
+    for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports"):
+
+                    voltage = ReadVoltage(sensor_number//4,((sensor_number%4)+1))
+                    pressure = ((polynomes[sensor_number])[0])*voltage + ((polynomes[sensor_number])[1])
+                    pressurearray.append(pressure)
+                    ret = ret+"\t"+str(pressure)
                 
     ret = ret.strip("\t")
     return ret, pressurearray

@@ -10,7 +10,9 @@ import sys
 
 
 def main():
-    
+
+    js.MergeJSONConfigs()
+
     atexit.register(exit_handler)
     signal.signal(signal.SIGINT, kill_handler)
     signal.signal(signal.SIGTERM, kill_handler)
@@ -46,11 +48,11 @@ def main():
         
         
         temperaturearrays=[]
-        for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_ports"):
+        for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_temperature_ports"):
             temperaturearrays.append([])
             temperaturelegend.append([i])
         pressurearrays = []
-        for i in range(8):
+        for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_voltage_ports"):
             pressurearrays.append([])
             pressurelegend.append([i+1])
         
@@ -174,5 +176,6 @@ def kill_handler(*args):
     sys.exit(0)
 
 
-main()
+if __name__ == "__main__":
+    main()
 
