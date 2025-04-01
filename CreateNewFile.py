@@ -20,7 +20,7 @@ def MakeNewFile():
         handle = open(filename,"a")
         handle.write(f"Current time \t\t")
         
-        for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_ports"):
+        for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_voltage_ports"):
             handle.write(f"Temp. port {sensor_number}\t")
             
         handle.write("\t")
