@@ -45,7 +45,7 @@ def ReadAllVoltages():
 
     for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports"):
 
-                    voltage = ReadVoltage(sensor_number//4,((sensor_number%4)+1))
+                    voltage = ReadVoltage((sensor_number//4)*4,((sensor_number%4)+1))
                     pressure = ((polynomes[sensor_number])[0])*voltage + ((polynomes[sensor_number])[1])
                     pressurearray.append(pressure)
                     ret = ret+"\t"+str(pressure)
