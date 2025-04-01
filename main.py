@@ -87,27 +87,43 @@ def main():
     while True:
         current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
         
-        handle = open(filename,"a")
-        handle.write(f"{current_time}\t\t")
-        handle.close()
+        #handle = open(filename,"a")
+        #handle.write(f"{current_time}\t\t")
+        #handle.close()
         
         tempertaurelogentry, temperaturelist = sm.ReadAllTemperatures()
         #temperaturelist = sm.RecordTemperatureToLog(filename)
-        handle = open(filename,"a")
-        handle.write(f"\t\t")
-        handle.close()
+        #handle = open(filename,"a")
+        #handle.write(f"\t\t")
+        #handle.close()
         
         
         pressurelogentry, pressurelist = sm.ReadAllVoltages()
         #pressurelist = sm.RecordVoltageToLog(filename)
-        handle = open(filename,"a")
-        handle.write(f"\n")
-        handle.close()
+        #handle = open(filename,"a")
+        #handle.write(f"\n")
+        #handle.close()
         
         if refreshcounter >= refreshtick:
             refreshcounter = 0
-            sm.RecordTemperatureToLog(tempertaurelogentry, filename)
-            sm.RecordVoltageToLog(pressurelogentry, filename)
+
+            handle = open(filename, "a")
+            handle.write(f"{current_time}\t\t")
+            for element in temperaturelist:
+                handle.write(f"{element}\t")
+            handle.write("\t")
+            for element in pressurelist:
+                handle.write(f"{element}\t")
+            handle.write("\n")
+            handle.close()
+
+            #sm.RecordTemperatureToLog(tempertaurelogentry, filename)
+            #sm.RecordVoltageToLog(pressurelogentry, filename)
+
+
+
+
+
         refreshcounter += 1
         
         
