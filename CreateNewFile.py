@@ -3,7 +3,7 @@ import JSONoperators as js
 
 def MakeNewFile():
     
-    current_directory = str(subprocess.run(["pwd"]))
+    current_directory = str(subprocess.run([f"pwd"], capture_output=True).stdout)
     while True:
         filename = str(input("Enter filename: "))
         type = str(subprocess.run([f"file", f"{filename}"], cwd=current_directory, capture_output=True).stdout)
