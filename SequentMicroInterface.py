@@ -5,7 +5,7 @@ import datetime
 
 
 def ReadTemperature(sensor_number):
-    rtd_directory = JSONoperators.ReadJSONConfig("Technical","RTD_directory")
+    rtd_directory = js.ReadJSONConfig("Technical","RTD_directory")
     ret = str(subprocess.run([f"rtd", f"0", "readpoly5", f"{sensor_number}"], cwd=rtd_directory, capture_output=True).stdout)
     ret = float(ret[2:(len(ret)-3)])
     return ret
