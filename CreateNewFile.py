@@ -3,9 +3,10 @@ import JSONoperators as js
 
 def MakeNewFile():
     
+    current_directory = str(subprocess.run(["pwd"]))
     while True:
         filename = str(input("Enter filename: "))
-        type = str(subprocess.run([f"file", f"{filename}"], cwd="/home/pi/Desktop/ColdlabTemperature", capture_output=True).stdout)
+        type = str(subprocess.run([f"file", f"{filename}"], cwd=current_directory, capture_output=True).stdout)
         type = type[(len(filename)+4):(len(type)-3)]
 
 
@@ -14,7 +15,7 @@ def MakeNewFile():
         else:
             print("Invalid filename")
         
-    subprocess.run([f"touch", f"{filename}"], cwd="/home/pi/Desktop/ColdlabTemperature")
+    subprocess.run([f"touch", f"{filename}"], cwd=current_directory)
     if type == f"cannot open `{filename}' (No such file or directory)":
         
         handle = open(filename,"a")

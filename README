@@ -12,3 +12,16 @@ Need to figure out which hardware port has which ID!!!
 
 Exactly 8 polynomes are required in config to convert voltage to pressure
 Polynomes have a formula [a,b], where (pressure = a*voltage + b) formula is used to convert raw output to pressure in kpa
+
+Matplotlib required
+
+Drivers for Sequent Microsystems RTD board required:
+
+     
+
+    ~$ git clone https://github.com/SequentMicrosystems/rtd-rpi.git
+    ~$ cd /home/pi/rtd-rpi
+    ~/rtd-rpi$ sudo make install
+    ~/rtd-rpi$ rtd
+
+
