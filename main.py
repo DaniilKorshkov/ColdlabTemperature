@@ -21,7 +21,7 @@ def main():
     dodisplaygraphs = js.ReadJSONConfig("RTD_options","showgraphs")
     entriestodisplay = js.ReadJSONConfig("RTD_options","entriestodisplay")
     refreshtime = js.ReadJSONConfig("RTD_options","refreshtime")
-    plt_backend = = js.ReadJSONConfig("Technical","plt_backend")
+    plt_backend = js.ReadJSONConfig("Technical","plt_backend")
 
     if dodisplaygraphs == "True":
         plt.switch_backend(plt_backend)
