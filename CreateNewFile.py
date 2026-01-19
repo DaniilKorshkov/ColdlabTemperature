@@ -3,7 +3,7 @@ import JSONoperators as js
 
 def MakeNewFile():
     
-    current_directory = JSONoperators.ReadJSONConfig("Technical","current_directory")
+    current_directory = js.ReadJSONConfig("Technical","current_directory")
 
     while True:
         filename = str(input("Enter filename: "))
