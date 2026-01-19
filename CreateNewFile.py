@@ -3,8 +3,7 @@ import JSONoperators as js
 
 def MakeNewFile():
     
-    current_directory = str(subprocess.run([f"pwd"], capture_output=True).stdout)
-    current_directory = current_directory[(len(current_directory)+4):(len(current_directory)-3)]
+    current_directory = JSONoperators.ReadJSONConfig("Technical","current_directory")
 
     while True:
         filename = str(input("Enter filename: "))
