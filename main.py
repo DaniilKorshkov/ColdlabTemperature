@@ -11,6 +11,10 @@ import sys
 
 def main():
 
+
+
+    #------------------------------ initiation --------------------------------------------
+
     js.MergeJSONConfigs()
 
     atexit.register(exit_handler)
@@ -47,45 +51,17 @@ def main():
         
         
         
-        temperaturelegend = []
-        pressurelegend = []
-        
-        
-        temperaturearrays=[]
-        for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_temperature_ports"):
-            temperaturearrays.append([])
-            temperaturelegend.append([i])
-        pressurearrays = []
-        for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_voltage_ports"):
-            pressurearrays.append([])
-            pressurelegend.append([i+1])
-        
-        
-        
-        x_ax = []
-        
-        colorlist = ['r','g','b','c','m','y','k','tab:brown']
-        
-       
-       
-            
-        
-            
-        
-        tempfig = plt.figure()
-        tempax = tempfig.add_subplot(111)
-        tempfig.show()
-        
-        pressfig = plt.figure()
-        pressax = pressfig.add_subplot(111)
-        pressfig.show()
+        pressurearrays, temperaturearrays = initiate_frame()
         
     refreshtick = int(interval/refreshtime)
     if refreshtick < 1:
         refreshtick = 1
     refreshcounter = refreshtick
         
-        
+    
+
+
+    #------------------------------ infinite cycle --------------------------------------------
     
     
     while True:
@@ -135,50 +111,7 @@ def main():
             
             
             
-            for i in range(len(temperaturelist)):
-                temperaturearrays[i].append(temperaturelist[i])
-                if len(temperaturearrays[i]) > entriestodisplay:
-                    void = (temperaturearrays[i]).pop(0)
-            
-            for i in range(len(pressurelist)):
-                pressurearrays[i].append(pressurelist[i])
-                if len(pressurearrays[i]) > entriestodisplay:
-                    void = (pressurearrays[i]).pop(0)
-            
-            
-            x_ax.append(datetime.datetime.now())
-            
-            if len(x_ax) > entriestodisplay:
-                void = x_ax.pop(0)
-                
-                
-            
-            
-            i = 0
-            tempax.cla()
-            tempax.set_title(f"Temperature (oC vs time)")
-            for array in temperaturearrays:
-                
-                tempax.plot(x_ax,array,color=colorlist[i])
-                
-                i += 1
-                
-            j = 0
-            pressax.cla()
-            pressax.set_title(f"Pressure (kPa vs time)")
-            for array in pressurearrays:
-                pressax.plot(x_ax,array,color=colorlist[j])
-                
-                j += 1
-            
-            
-            tempax.legend(temperaturelegend,loc=3)
-            pressax.legend(pressurelegend,loc=3)
-            
-            
-                
-            tempfig.canvas.draw()
-            pressfig.canvas.draw()
+            update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelist)
             
             
             
@@ -199,3 +132,89 @@ def kill_handler(*args):
 if __name__ == "__main__":
     main()
 
+
+
+
+def initiate_frame():
+    temperaturelegend = []
+    pressurelegend = []
+    
+    
+    temperaturearrays=[]
+    for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_temperature_ports"):
+        temperaturearrays.append([])
+        temperaturelegend.append([i])
+    pressurearrays = []
+    for i in js.ReadJSONConfig(f"RTD_options",f"currently_processed_voltage_ports"):
+        pressurearrays.append([])
+        pressurelegend.append([i+1])
+    
+    
+    
+    x_ax = []
+    
+    colorlist = ['r','g','b','c','m','y','k','tab:brown']
+    
+    
+    
+        
+    
+        
+    
+    tempfig = plt.figure()
+    tempax = tempfig.add_subplot(111)
+    tempfig.show()
+    
+    pressfig = plt.figure()
+    pressax = pressfig.add_subplot(111)
+    pressfig.show()
+
+    return pressurearrays, temperaturearrays
+
+
+
+def update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelist):
+    for i in range(len(temperaturelist)):
+        temperaturearrays[i].append(temperaturelist[i])
+        if len(temperaturearrays[i]) > entriestodisplay:
+            void = (temperaturearrays[i]).pop(0)
+            
+    for i in range(len(pressurelist)):
+        pressurearrays[i].append(pressurelist[i])
+        if len(pressurearrays[i]) > entriestodisplay:
+            void = (pressurearrays[i]).pop(0)
+    
+    
+    x_ax.append(datetime.datetime.now())
+    
+    if len(x_ax) > entriestodisplay:
+        void = x_ax.pop(0)
+        
+        
+    
+    
+    i = 0
+    tempax.cla()
+    tempax.set_title(f"Temperature (oC vs time)")
+    for array in temperaturearrays:
+        
+        tempax.plot(x_ax,array,color=colorlist[i])
+        
+        i += 1
+        
+    j = 0
+    pressax.cla()
+    pressax.set_title(f"Pressure (kPa vs time)")
+    for array in pressurearrays:
+        pressax.plot(x_ax,array,color=colorlist[j])
+        
+        j += 1
+    
+    
+    tempax.legend(temperaturelegend,loc=3)
+    pressax.legend(pressurelegend,loc=3)
+    
+    
+        
+    tempfig.canvas.draw()
+    pressfig.canvas.draw()
