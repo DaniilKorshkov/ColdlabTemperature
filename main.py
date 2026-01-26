@@ -48,10 +48,11 @@ def main():
 
         
     if dodisplaygraphs == "True":
-        
-        
-        
         pressurearrays, temperaturearrays = initiate_frame()
+
+
+
+        
         
     refreshtick = int(interval/refreshtime)
     if refreshtick < 1:
@@ -108,9 +109,6 @@ def main():
         
         
         if dodisplaygraphs == "True":
-            
-            
-            
             update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelist)
             
             
@@ -136,6 +134,15 @@ if __name__ == "__main__":
 
 
 def initiate_frame():
+
+
+
+
+    #----------------------------   Produce X and Y arrays to display  ------------------------------------------
+
+
+
+
     temperaturelegend = []
     pressurelegend = []
     
@@ -158,12 +165,16 @@ def initiate_frame():
     
     
         
-    
+    #----------------------------------   Render temperature graph frame   ------------------------------------
         
     
     tempfig = plt.figure()
     tempax = tempfig.add_subplot(111)
     tempfig.show()
+
+
+    #----------------------------------   Render pressure graph frame   ------------------------------------
+
     
     pressfig = plt.figure()
     pressax = pressfig.add_subplot(111)
@@ -174,15 +185,21 @@ def initiate_frame():
 
 
 def update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelist):
+
+
+    #----------------------------   Produce X and Y arrays to display  ------------------------------------------
+
+
+
     for i in range(len(temperaturelist)):
         temperaturearrays[i].append(temperaturelist[i])
         if len(temperaturearrays[i]) > entriestodisplay:
-            void = (temperaturearrays[i]).pop(0)
+            void = (temperaturearrays[i]).pop(0)  #reduce array length to 'entriestodisplay'
             
     for i in range(len(pressurelist)):
         pressurearrays[i].append(pressurelist[i])
         if len(pressurearrays[i]) > entriestodisplay:
-            void = (pressurearrays[i]).pop(0)
+            void = (pressurearrays[i]).pop(0)  #reduce array length to 'entriestodisplay'
     
     
     x_ax.append(datetime.datetime.now())
@@ -191,7 +208,10 @@ def update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelis
         void = x_ax.pop(0)
         
         
-    
+    #----------------------------------   Render temperature graph frame   ------------------------------------
+
+
+
     
     i = 0
     tempax.cla()
@@ -201,6 +221,14 @@ def update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelis
         tempax.plot(x_ax,array,color=colorlist[i])
         
         i += 1
+
+
+    tempax.legend(temperaturelegend,loc=3)
+    tempfig.canvas.draw()
+
+    
+    #----------------------------------   Render pressure graph frame   ------------------------------------
+
         
     j = 0
     pressax.cla()
@@ -210,11 +238,8 @@ def update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelis
         
         j += 1
     
+
     
-    tempax.legend(temperaturelegend,loc=3)
+    
     pressax.legend(pressurelegend,loc=3)
-    
-    
-        
-    tempfig.canvas.draw()
     pressfig.canvas.draw()
