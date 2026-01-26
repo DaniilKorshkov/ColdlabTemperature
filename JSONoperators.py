@@ -83,3 +83,103 @@ def MergeJSONConfigs(MainConfig="MainConfig",DefaultMainConfig="DefaultMainConfi
         for line in NewConfig:
             handle.write(line)
         handle.close()
+
+
+
+
+
+
+
+def ReadCSV(filename, entries_to_display):
+    handle = open(filename,"r")
+
+
+    temperature_sensors_list = []
+    pressure_sensors_list = []
+
+
+    time_array = []
+    temperature_arrays = {}
+    pressure_arrays = {}
+
+
+    temperature_sensors_count = 0 
+    pressure_sensors_count = 0
+
+
+
+    for line in handle:
+        if "Current time" in line:    #handle first line
+
+            splitline = line.split('\t')
+            
+
+            for element in splitline:
+                if "Temp." in element:
+                    temperature_sensors_list.append(element)
+                    temperature_arrays[element] = []
+                if "Press." in element:
+                    pressure_sensors_list.append(element)
+                    pressure_arrays[element] = []
+            
+
+        
+        elif line == "" or line == "\n":
+            pass
+            
+
+
+
+        else:  #handle other lines
+
+    
+
+            splitline = line.split('\t')
+
+            time_array.append(splitline[0])
+            if len(time_array) > entries_to_display:
+                    time_array[sensor].pop(0)
+
+            
+            i = 1
+
+            for sensor in temperature_sensors_list:
+
+                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                    i += 1
+
+
+                temperature_arrays[sensor].append(splitline[i])
+                i += 1
+
+
+                if len(temperature_arrays[sensor]) > entries_to_display:
+                    temperature_arrays[sensor].pop(0)
+
+
+            for sensor in pressure_sensors_list:
+
+                
+                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                    i += 1
+
+
+
+                pressure_arrays[sensor].append(splitline[i])
+                i += 1
+
+                if len(pressure_arrays[sensor]) > entries_to_display:
+                    pressure_arrays[sensor].pop(0)
+
+    handle.close()
+
+
+    return time_array, temperature_arrays, pressure_arrays
+
+
+if __name__ == "__main__":
+        print(123)
+        print(ReadCSV("b",100))
+
+
+    
