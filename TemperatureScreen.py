@@ -16,6 +16,11 @@ def update_frame(i):
 
     tempax.set_xlabel(f'Time')
     tempax.set_ylabel("Temperature oC")
+
+    tempax.set_xscale('linear')
+    tempax.set_yscale('linear')
+
+
     #tempax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
     #tempax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
 
