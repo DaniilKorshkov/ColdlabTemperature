@@ -4,7 +4,7 @@ import JSONoperators as js
 import matplotlib.ticker as ticker
 
 def update_frame(i):
-    time_array, temperature_arrays, pressure_arrays = js.ReadCSV('b',1000)
+    time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,1000)
 
     tempax.clear()
     #pressax.clear()
@@ -50,7 +50,7 @@ def update_frame(i):
 def initiate_frame():
 
     while True:
-        input_filename = str(input("Enter filename"))
+        input_filename = str(input("Enter filename: "))
         try:
             handle = open(input_filename,"r")
             handle.close
