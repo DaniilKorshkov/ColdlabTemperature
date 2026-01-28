@@ -6,7 +6,9 @@ import matplotlib.ticker as ticker
 def update_frame(i):
     time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,1000)
 
-    tempax.clear()
+   
+
+    tempax.cla()
     #pressax.clear()
 
     tempax.set_title(f"Temperature (oC vs time)")
@@ -21,11 +23,11 @@ def update_frame(i):
     tempax.set_yscale('linear')
 
 
-    #tempax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
-    #tempax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+    tempax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+    tempax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
 
-    #tempax.xaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
-    #tempax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+    tempax.xaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+    tempax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
 
 
     
@@ -35,6 +37,10 @@ def update_frame(i):
 
 
     for temperature_array_key in temperature_arrays:
+
+
+       
+
         tempax.plot(time_array, temperature_arrays[temperature_array_key], color = colorlist[i])
         temperaturelegend.append(temperature_array_key)
         i += 1

@@ -1,5 +1,7 @@
 import json
 import os
+import time
+import datetime
 
 
 def ReadJSONConfig(linename,entryname,config="MainConfig"): #function to read a specific entry from specified line in config
@@ -136,7 +138,11 @@ def ReadCSV(filename, entries_to_display):
 
             splitline = line.split('\t')
 
-            time_array.append(splitline[0])
+            
+            utc_time = (datetime.datetime.fromtimestamp(time.mktime(time.strptime(splitline[0],"%Y-%b-%d %H:%M:%S")))).timestamp()
+    
+
+            time_array.append(utc_time)
             if len(time_array) > entries_to_display:
                     time_array[sensor].pop(0)
 
@@ -149,7 +155,7 @@ def ReadCSV(filename, entries_to_display):
                     i += 1
 
 
-                temperature_arrays[sensor].append(splitline[i])
+                temperature_arrays[sensor].append(float(splitline[i]))
                 i += 1
 
 
@@ -165,7 +171,7 @@ def ReadCSV(filename, entries_to_display):
 
 
 
-                pressure_arrays[sensor].append(splitline[i])
+                pressure_arrays[sensor].append(float(splitline[i]))
                 i += 1
 
                 if len(pressure_arrays[sensor]) > entries_to_display:
