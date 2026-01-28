@@ -2,10 +2,17 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import JSONoperators as js
 import matplotlib.ticker as ticker
+from matplotlib.dates import DateFormatter
+import datetime as dt
 
 def update_frame(i):
-    time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,1000)
 
+    entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
+    raw_time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,entries_to_display)
+    tempax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
+
+
+    time_array = [dt.datetime.fromtimestamp(element) for element in raw_time_array]
    
 
     tempax.cla()

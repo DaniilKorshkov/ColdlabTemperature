@@ -3,6 +3,7 @@ import time
 import datetime
 import CreateNewFile
 import matplotlib.pyplot as plt
+
 import JSONoperators as js
 import atexit
 import signal
@@ -27,8 +28,8 @@ def main():
     refreshtime = js.ReadJSONConfig("RTD_options","refreshtime")
     plt_backend = js.ReadJSONConfig("Technical","plt_backend")
 
-    if dodisplaygraphs == "True":
-        plt.switch_backend(plt_backend)
+    #if dodisplaygraphs == "True":
+    #    plt.switch_backend(plt_backend)
     
 
     while True:
@@ -42,13 +43,15 @@ def main():
         
             
             
+    temperaturelegend = []
+
     print(f"To terminate the process, please use Ctrl+C")
 
 
 
         
-    if dodisplaygraphs == "True":
-        pressurearrays, temperaturearrays = initiate_frame()
+    #if dodisplaygraphs == "True":
+    #    pressurearrays, temperaturearrays = initiate_frame()
 
 
 
@@ -108,8 +111,8 @@ def main():
         refreshcounter += 1
         
         
-        if dodisplaygraphs == "True":
-            update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelist)
+        #if dodisplaygraphs == "True":
+        #    update_frame(temperaturearrays, pressurearrays, temperaturelist, pressurelist)
             
             
             
