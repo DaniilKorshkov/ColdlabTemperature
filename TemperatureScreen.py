@@ -48,7 +48,21 @@ def update_frame(i):
 
 
 
-def initiate_frame(filename):
+def initiate_frame():
+
+    while True:
+        input_filename = str(input("Enter filename"))
+        try:
+            handle = open(input_filename,"r")
+            handle.close
+            break
+        except:
+            print("Invalid filename")
+
+    
+    global filename
+    filename = input_filename
+
     
     global tempfig
     tempfig = plt.figure()
