@@ -83,4 +83,4 @@ def initiate_frame():
 
 
 if __name__ == "__main__":
-    initiate_frame('b')
+    initiate_frame()
