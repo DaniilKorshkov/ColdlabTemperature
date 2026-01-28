@@ -23,8 +23,7 @@ def update_frame(i):
     #tempax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
 
 
-    tempax.xaxis.set_major_locator(ticker.MaxNLocator(5))
-    tempax.yaxis.set_major_locator(ticker.MaxNLocator(5))
+    
     tempax.tick_params('x', labelrotation=90)
     
     temperaturelegend = []
