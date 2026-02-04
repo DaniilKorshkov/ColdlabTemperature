@@ -144,7 +144,7 @@ def ReadCSV(filename, entries_to_display):
 
             time_array.append(utc_time)
             if len(time_array) > entries_to_display:
-                    time_array[sensor].pop(0)
+                    time_array.pop(0)
 
             
             i = 1

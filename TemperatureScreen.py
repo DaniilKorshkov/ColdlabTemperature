@@ -10,6 +10,7 @@ def update_frame(i):
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
     raw_time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,entries_to_display)
     tempax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
+    legend_dictionary = js.ReadJSONConfig("Dictionaries","RTD_dictionary")
 
 
     time_array = [dt.datetime.fromtimestamp(element) for element in raw_time_array]
@@ -49,7 +50,10 @@ def update_frame(i):
        
 
         tempax.plot(time_array, temperature_arrays[temperature_array_key], color = colorlist[i])
-        temperaturelegend.append(temperature_array_key)
+        try:
+            temperaturelegend.append(legend_dictionary[temperature_array_key])
+        except:
+            temperaturelegend.append(temperature_array_key)
         i += 1
     
 
