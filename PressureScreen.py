@@ -99,7 +99,7 @@ def initiate_frame():
 
 
 
-    ani = FuncAnimation(tempfig, update_frame, interval=1000)
+    ani = FuncAnimation(pressfig, update_frame, interval=1000)
     plt.show()
 
 
