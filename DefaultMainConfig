@@ -2,3 +2,4 @@
 {"class":"Polynomes","polynomes":[[1,2],[3,4],[5,6],[7,8],[9,10],[11,12],[13,14],[15,16]]}
 {"class":"Technical","RTD_directory":"/home/pi/rtd-rpi", "current_directory":"/home/pi/ColdlabTemperature", "plt_backend":"Agg"}
 {"class":"Dictionaries","RTD_dictionary":{"Temp. port 4":"FancyName"}, "Press_dictionary":{"Press. port 1":"FancyName1"}  }
+{"class":"keysight_power_supply","vid":0x2a8d,"pid":0xcc04, "address":'USB0::10893::52228::CN65290125::0::INSTR'}
