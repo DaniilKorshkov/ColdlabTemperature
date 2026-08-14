@@ -1,0 +1,107 @@
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import JSONoperators as js
+import matplotlib.ticker as ticker
+from matplotlib.dates import DateFormatter
+import datetime as dt
+
+def update_frame(i):
+
+    entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
+    raw_time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,entries_to_display)
+    tempax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
+    legend_dictionary = js.ReadJSONConfig("Dictionaries","RTD_dictionary")
+
+
+    time_array = [dt.datetime.fromtimestamp(element) for element in raw_time_array]
+   
+
+    tempax.cla()
+    #pressax.clear()
+
+    tempax.set_title(f"Amperage vs time")
+    colorlist = ['r','g','b','c','m','y','k','tab:brown']
+    i = 0
+
+
+    tempax.set_xlabel(f'Time')
+    tempax.set_ylabel("Amperage")
+
+    tempax.set_xscale('linear')
+    tempax.set_yscale('linear')
+
+
+    tempax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+    tempax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+
+    tempax.xaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+    tempax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+
+
+    
+    tempax.tick_params('x', labelrotation=90)
+    
+    temperaturelegend = []
+
+
+    for temperature_array_key in temperature_arrays:
+
+
+       
+
+        tempax.plot(time_array, temperature_arrays[temperature_array_key], color = colorlist[i])
+        try:
+            temperaturelegend.append(legend_dictionary[temperature_array_key])
+        except:
+            temperaturelegend.append(temperature_array_key)
+        i += 1
+    
+
+    tempax.legend(temperaturelegend,loc=3)
+
+
+
+    #for pressure_array in pressure_arrays:
+     #   pressax.plot(time_array, pressure_array)
+    
+
+
+
+
+def initiate_frame():
+
+    while True:
+        input_filename = str(input("Enter filename: "))
+        try:
+            handle = open(input_filename,"r")
+            handle.close
+            break
+        except:
+            print("Invalid filename")
+
+    
+    global filename
+    filename = input_filename
+
+    
+    global tempfig
+    tempfig = plt.figure()
+    #pressfig = plt.figure()
+
+    global tempax
+    tempax = tempfig.add_subplot(111)
+    #pressax = pressfig.add_subplot(111)
+
+
+
+
+
+
+
+
+    ani = FuncAnimation(tempfig, update_frame, interval=1000)
+    plt.show()
+
+
+if __name__ == "__main__":
+    initiate_frame()

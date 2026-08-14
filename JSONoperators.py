@@ -183,6 +183,85 @@ def ReadCSV(filename, entries_to_display):
     return time_array, temperature_arrays, pressure_arrays
 
 
+
+
+def ReadCSVAmperage(filename, entries_to_display):
+    handle = open(filename,"r")
+
+
+    channels_list = []
+    
+
+
+    time_array = []
+    amperage_arrays = {}
+
+    channels_count = 0 
+    
+
+
+
+    for line in handle:
+        if "Current time" in line:    #handle first line
+
+            splitline = line.split('\t')
+            
+
+            for element in splitline:
+                if len(element) == 4:
+                
+                    channels_list.append(element)
+                    channels_count += 1
+                
+            
+
+        
+        elif line == "" or line == "\n":
+            pass
+            
+
+
+
+        else:  #handle other lines
+
+    
+
+            splitline = line.split('\t')
+
+            
+            utc_time = (datetime.datetime.fromtimestamp(time.mktime(time.strptime(splitline[0],"%Y-%b-%d %H:%M:%S")))).timestamp()
+    
+
+            time_array.append(utc_time)
+            if len(time_array) > entries_to_display:
+                    time_array.pop(0)
+
+            
+            i = 1
+
+            for sensor in channels_list:
+
+                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                    i += 1
+
+
+                amperage_arrays[sensor].append(float(splitline[i]))
+                i += 1
+
+
+                if len(amperage_arrays[sensor]) > entries_to_display:
+                    temperature_arrays[sensor].pop(0)
+
+
+            
+
+    handle.close()
+
+
+    return time_array, amperage_arrays
+
+
+
 if __name__ == "__main__":
         print(123)
         print(ReadCSV("b",100))
