@@ -68,16 +68,9 @@ def update_frame(i):
 
 
 
-def initiate_frame():
+def initiate_frame(input_filename):
 
-    while True:
-        input_filename = str(input("Enter filename: "))
-        try:
-            handle = open(input_filename,"r")
-            handle.close
-            break
-        except:
-            print("Invalid filename")
+    
 
     
     global filename
@@ -103,5 +96,22 @@ def initiate_frame():
     plt.show()
 
 
+def initiate():
+
+    while True:
+        input_filename = str(input("Enter filename: "))
+        try:
+            handle = open(input_filename,"r")
+            handle.close
+            break
+        except:
+            print("Invalid filename")
+
+    
+    initiate_frame(input_filename)
+
+
+
+
 if __name__ == "__main__":
-    initiate_frame()
+    initiate()

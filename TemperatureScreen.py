@@ -8,7 +8,7 @@ import datetime as dt
 def update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,entries_to_display)
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays = js.ReadCSV(filename,entries_to_display)
     tempax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","RTD_dictionary")
 
@@ -68,16 +68,9 @@ def update_frame(i):
 
 
 
-def initiate_frame():
+def initiate_frame(input_filename):
 
-    while True:
-        input_filename = str(input("Enter filename: "))
-        try:
-            handle = open(input_filename,"r")
-            handle.close
-            break
-        except:
-            print("Invalid filename")
+    
 
     
     global filename
@@ -103,5 +96,21 @@ def initiate_frame():
     plt.show()
 
 
+
+def initiate():
+
+    while True:
+        input_filename = str(input("Enter filename: "))
+        try:
+            handle = open(input_filename,"r")
+            handle.close
+            break
+        except:
+            print("Invalid filename")
+
+    
+    initiate_frame(input_filename)
+
+
 if __name__ == "__main__":
-    initiate_frame()
+    initiate()

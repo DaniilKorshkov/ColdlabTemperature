@@ -8,15 +8,15 @@ import datetime as dt
 def update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,entries_to_display)
-    tempax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
-    legend_dictionary = js.ReadJSONConfig("Dictionaries","RTD_dictionary")
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays = js.ReadCSV(filename,entries_to_display)
+    ampax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
+    legend_dictionary = js.ReadJSONConfig("Dictionaries","Amp_dictionary")
 
 
     time_array = [dt.datetime.fromtimestamp(element) for element in raw_time_array]
    
 
-    tempax.cla()
+    ampax.cla()
     #pressax.clear()
 
     tempax.set_title(f"Amperage vs time")
@@ -24,40 +24,40 @@ def update_frame(i):
     i = 0
 
 
-    tempax.set_xlabel(f'Time')
-    tempax.set_ylabel("Amperage")
+    ampax.set_xlabel(f'Time')
+    ampax.set_ylabel("Amperage")
 
-    tempax.set_xscale('linear')
-    tempax.set_yscale('linear')
+    ampax.set_xscale('linear')
+    ampax.set_yscale('linear')
 
 
-    tempax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
-    tempax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+    ampax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+    ampax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
 
-    tempax.xaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
-    tempax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+    ampax.xaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+    ampax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
 
 
     
-    tempax.tick_params('x', labelrotation=90)
+    ampax.tick_params('x', labelrotation=90)
     
-    temperaturelegend = []
+    amperagelegend = []
 
 
-    for temperature_array_key in temperature_arrays:
+    for amperage_array_key in amperage_arrays:
 
 
        
 
-        tempax.plot(time_array, temperature_arrays[temperature_array_key], color = colorlist[i])
+        tempax.plot(time_array, amperage_arrays[amperage_array_key], color = colorlist[i])
         try:
-            temperaturelegend.append(legend_dictionary[temperature_array_key])
+            amperagelegend.append(legend_dictionary[amperage_array_key])
         except:
-            temperaturelegend.append(temperature_array_key)
+            amperagelegend.append(amperage_array_key)
         i += 1
     
 
-    tempax.legend(temperaturelegend,loc=3)
+    tempax.legend(amperagelegend,loc=3)
 
 
 
@@ -68,16 +68,7 @@ def update_frame(i):
 
 
 
-def initiate_frame():
-
-    while True:
-        input_filename = str(input("Enter filename: "))
-        try:
-            handle = open(input_filename,"r")
-            handle.close
-            break
-        except:
-            print("Invalid filename")
+def initiate_frame(input_filename):
 
     
     global filename
@@ -103,5 +94,24 @@ def initiate_frame():
     plt.show()
 
 
+
+
+
+
+
+def initiate():
+
+    while True:
+        input_filename = str(input("Enter filename: "))
+        try:
+            handle = open(input_filename,"r")
+            handle.close
+            break
+        except:
+            print("Invalid filename")
+
+    
+    initiate_frame(input_filename)
+
 if __name__ == "__main__":
-    initiate_frame()
+    initiate()

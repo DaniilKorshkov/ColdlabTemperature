@@ -29,8 +29,11 @@ def MakeNewFile():
 
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_voltage_ports"):
             handle.write(f"Press. port {sensor_number}\t")
+
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_amperage_ports"):
+            handle.write(f"Amp. port {sensor_number}\t")
         
-        handle.write(f"\n\n")
+        handle.write(f"\n")
         
         handle.close()
         
