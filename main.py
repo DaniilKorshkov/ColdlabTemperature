@@ -171,11 +171,7 @@ def main():
             handle.close()
 
             
-            log_handle = open(filename, "a")
-            log_handle.write(f"{current_time}\t")
-            for element in output:
-                log_handle.write(element)
-                log_handle.write("\t")
+            
             
 
 
