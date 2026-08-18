@@ -136,7 +136,7 @@ def amperage_update_frame(i):
 def pressure_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays = js.ReadCSV(filename,entries_to_display)
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays = js.ReadCSV(filename,entries_to_display)
     pressax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","Press_dictionary")
 
