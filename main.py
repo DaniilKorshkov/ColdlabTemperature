@@ -3,6 +3,7 @@ import time
 import datetime
 import CreateNewFile
 import matplotlib.pyplot as plt
+import serial
 
 import JSONoperators as js
 import atexit
