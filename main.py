@@ -219,12 +219,13 @@ def initiate_frame():
 
 
 
+    global pressani, tempani, ampani
     pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
     tempani = FuncAnimation(tempfig, temperature_update_frame, interval=1000)
     ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
 
 
-    plt.show()
+    plt.show(block=False)
 
 
 
