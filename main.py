@@ -66,6 +66,8 @@ def main():
 
     if do_amperage:
 
+        PORT = js.ReadJSONConfig("Technical","arduino_address")
+
         ser = serial.Serial()
         ser.port = PORT
         ser.baudrate = 115200
