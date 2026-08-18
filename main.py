@@ -393,10 +393,10 @@ def main():
             
             
 
-
             last_cycle_time = datetime.datetime.now().timestamp()
 
         
+        plt.pause(0.01)
         
         
     
