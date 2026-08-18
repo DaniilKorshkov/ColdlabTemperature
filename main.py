@@ -145,7 +145,7 @@ def main():
 
         #-------------------------- Appending log file --------------------------------------
 
-        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and (len(amperage_output) == 8:):
+        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and (len(amperage_output) == 8):
 
 
             current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
