@@ -27,6 +27,19 @@ def main():
     else:
         do_amperage = False
 
+    currently_processed_pressure_ports = js.ReadJSONConfig("RTD_options","currently_processed_voltage_ports")
+    if len(currently_processed_pressure_ports > 0):
+        do_pressure = True
+    else:
+        do_pressure = False
+
+    
+    currently_processed_temperature_ports = js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports")
+    if len(currently_processed_temperature_ports > 0):
+        do_temperature = True
+    else:
+        do_temperature = False
+
     while True:
         inputline = str(input("Display graphs(y/n): "))
         if inputline.lower() == "y":
@@ -87,9 +100,12 @@ def main():
 
 
     if display_graphs:
-        TemperatureScreen.initiate_frame(filename)
-        PressureScreen.initiate_frame(filename)
-        AmperageScreen.initiate_frame(filename)
+        if do_temperature:
+            TemperatureScreen.initiate_frame(filename)
+        if do_pressure:
+            PressureScreen.initiate_frame(filename)
+        if do_amperage:
+            AmperageScreen.initiate_frame(filename)
         
     
 
