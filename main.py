@@ -189,11 +189,13 @@ def main():
         
 def exit_handler():
     plt.close('all')
-    ser.close()
+    if do_amperage:
+        ser.close()
 
 def kill_handler(*args):
     sys.exit(0)
-    ser.close()
+    if do_amperage:
+        ser.close()
 
 if __name__ == "__main__":
     main()
