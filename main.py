@@ -22,20 +22,20 @@ def main():
 
 
     currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
-    if len(currently_processed_amperage_ports > 0):
+    if len(currently_processed_amperage_ports) > 0:
         do_amperage = True
     else:
         do_amperage = False
 
     currently_processed_pressure_ports = js.ReadJSONConfig("RTD_options","currently_processed_voltage_ports")
-    if len(currently_processed_pressure_ports > 0):
+    if len(currently_processed_pressure_ports) > 0:
         do_pressure = True
     else:
         do_pressure = False
 
     
     currently_processed_temperature_ports = js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports")
-    if len(currently_processed_temperature_ports > 0):
+    if len(currently_processed_temperature_ports) > 0:
         do_temperature = True
     else:
         do_temperature = False
