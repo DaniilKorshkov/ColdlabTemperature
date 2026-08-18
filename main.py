@@ -15,6 +15,74 @@ import PressureScreen
 import AmperageScreen
 
 
+
+
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import JSONoperators as js
+import matplotlib.ticker as ticker
+from matplotlib.dates import DateFormatter
+import datetime as dt
+
+
+
+
+
+
+
+def initiate_frame():
+
+    
+
+    
+    global filename
+    
+
+    
+    global tempfig
+    tempfig = plt.figure()
+    #pressfig = plt.figure()
+
+    global tempax
+    tempax = tempfig.add_subplot(111)
+    #pressax = pressfig.add_subplot(111)
+
+    global pressfig
+    pressfig = plt.figure()
+    #pressfig = plt.figure()
+
+    global pressax
+    pressax = pressfig.add_subplot(111)
+
+    
+    global ampfig
+    ampfig = plt.figure()
+
+    global ampax
+    ampax = ampfig.add_subplot(111)
+
+
+
+
+
+
+    pressani = FuncAnimation(pressfig, TemperatureScreen.update_frame, interval=1000)
+    tempani = FuncAnimation(tempfig, PressureScreen.update_frame, interval=1000)
+    ampani = FuncAnimation(ampfig, AmperageScreen.update_frame, interval=1000)
+
+
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
 def main():
 
 
@@ -61,7 +129,7 @@ def main():
     signal.signal(signal.SIGTERM, kill_handler)
 
     
-    
+    global filename
     filename = CreateNewFile.MakeNewFile()
 
     if do_amperage:
@@ -93,7 +161,7 @@ def main():
         
             
             
-    temperaturelegend = []
+   
 
 
     last_cycle_time = 0
@@ -103,14 +171,7 @@ def main():
 
 
     if display_graphs:
-        if do_temperature:
-            TemperatureScreen.initiate_frame(filename)
-        if do_pressure:
-            PressureScreen.initiate_frame(filename)
-        if do_amperage:
-            AmperageScreen.initiate_frame(filename)
-        plt.show(block=False)
-
+       initiate_frame()
     
 
 
