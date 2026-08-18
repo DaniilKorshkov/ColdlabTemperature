@@ -93,7 +93,6 @@ def initiate_frame(input_filename):
 
 
     ani = FuncAnimation(pressfig, update_frame, interval=1000)
-    plt.show()
 
 
 def initiate():

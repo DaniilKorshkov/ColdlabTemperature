@@ -19,7 +19,7 @@ def update_frame(i):
     ampax.cla()
     #pressax.clear()
 
-    tempax.set_title(f"Amperage vs time")
+    ampax.set_title(f"Amperage vs time")
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
@@ -49,7 +49,7 @@ def update_frame(i):
 
        
 
-        tempax.plot(time_array, amperage_arrays[amperage_array_key], color = colorlist[i])
+        ampax.plot(time_array, amperage_arrays[amperage_array_key], color = colorlist[i])
         try:
             amperagelegend.append(legend_dictionary[amperage_array_key])
         except:
@@ -57,7 +57,7 @@ def update_frame(i):
         i += 1
     
 
-    tempax.legend(amperagelegend,loc=3)
+    ampax.legend(amperagelegend,loc=3)
 
 
 
@@ -75,13 +75,11 @@ def initiate_frame(input_filename):
     filename = input_filename
 
     
-    global tempfig
-    tempfig = plt.figure()
-    #pressfig = plt.figure()
+    global ampfig
+    ampfig = plt.figure()
 
-    global tempax
-    tempax = tempfig.add_subplot(111)
-    #pressax = pressfig.add_subplot(111)
+    global ampax
+    ampax = ampfig.add_subplot(111)
 
 
 
@@ -90,8 +88,7 @@ def initiate_frame(input_filename):
 
 
 
-    ani = FuncAnimation(tempfig, update_frame, interval=1000)
-    plt.show()
+    ani = FuncAnimation(ampfig, update_frame, interval=1000)
 
 
 

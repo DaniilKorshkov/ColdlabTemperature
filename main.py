@@ -109,7 +109,8 @@ def main():
             PressureScreen.initiate_frame(filename)
         if do_amperage:
             AmperageScreen.initiate_frame(filename)
-        
+        plt.show()
+
     
 
 
