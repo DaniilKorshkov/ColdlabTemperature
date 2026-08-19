@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import serial
 
 import JSONoperators as js
+import json
 import atexit
 import signal
 import sys
@@ -219,21 +220,50 @@ def initiate_frame():
 
 
 
-    global pressani, tempani, ampani
-    pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
-    tempani = FuncAnimation(tempfig, temperature_update_frame, interval=1000)
-    ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
+    
+
+    if do_pressure:
+        global pressani
+        pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
+    if do_temperature:
+        global tempani
+        tempani = FuncAnimation(tempfig, temperature_update_frame, interval=1000)
+    if do_amperage:
+        global ampani
+        ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
 
 
     plt.show(block=False)
 
 
+def modify_config_from_preset():
+    print("Select settings preset: ")
+    i = 1
+    presets_list = js.ReadJSONConfig("Presets","Presets_list")
+    for element in presets_list:
+        print(f"{i}) {element["preset_name"]}")
+        i+=1
+
+    while True:
+        try:
+            selection = int(input("Enter preset number: "))
+            assert selection > 0
+            assert selection < (len(presets_list) + 1)
+            print(f"Option {selection} selected")
+            break
+        except:
+            print("Invalid selection")
 
 
+    old_line_json = js.ReadJSONConfig("RTD_options")
 
+    old_line_json["currently_processed_temperature_ports"] = (presets_list[selection-1])["currently_processed_temperature_ports"]
+    old_line_json["currently_processed_voltage_ports"] = (presets_list[selection-1])["currently_processed_voltage_ports"]
+    old_line_json["currently_processed_amperage_ports"] = (presets_list[selection-1])["currently_processed_amperage_ports"]
 
+    new_line = json.dumps(old_line_json)
 
-
+    js.EditJSONConfig("RTD_options", new_line)
 
 
 
@@ -242,6 +272,11 @@ def main():
 
 
     #------------------------------ initiation --------------------------------------------
+
+
+    modify_config_from_preset()
+
+    global do_amperage, do_pressure, do_temperature
 
 
     currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
