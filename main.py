@@ -531,7 +531,7 @@ def main():
             
             vacuum_output = []
 
-            tmp = ret.split()
+            tmp = ret.split(",")
 
             try:
                 for i in range(6):
