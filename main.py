@@ -598,12 +598,22 @@ def exit_handler():
     try:
         ser.close()
     except:
+        pass
+
+    try:
+        vac_ser.close()
+    except:
         pass    
 
 def kill_handler(*args):
     sys.exit(0)
     try:
         ser.close()
+    except:
+        pass
+
+    try:
+        vac_serser.close()
     except:
         pass
 
