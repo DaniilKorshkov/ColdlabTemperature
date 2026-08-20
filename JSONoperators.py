@@ -153,16 +153,15 @@ def ReadCSV(filename, entries_to_display):
     temperature_sensors_list = []
     pressure_sensors_list = []
     amperage_sensors_list = []
+    vacuum_sensors_list = []
 
 
     time_array = []
     temperature_arrays = {}
     pressure_arrays = {}
     amperage_arrays = {}
+    vacuum_arrays = {}
 
-
-    temperature_sensors_count = 0 
-    pressure_sensors_count = 0
 
 
 
@@ -182,6 +181,9 @@ def ReadCSV(filename, entries_to_display):
                 if "Amp." in element:
                     amperage_sensors_list.append(element)
                     amperage_arrays[element] = []
+                if "Vac." in element:
+                    vacuum_sensors_list.append(element)
+                    vacuum_arrays[element] = []
             
 
         
@@ -249,13 +251,28 @@ def ReadCSV(filename, entries_to_display):
 
                 if len(amperage_arrays[sensor]) > entries_to_display:
                     amperage_arrays[sensor].pop(0)
+            
+
+            for sensor in vacuum_sensors_list:
+
+                
+                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                    i += 1
+
+
+
+                vacuum_arrays[sensor].append(float(splitline[i]))
+                i += 1
+
+                if len(vacuum_arrays[sensor]) > entries_to_display:
+                    vacuum_arrays[sensor].pop(0)
 
 
 
     handle.close()
 
 
-    return time_array, temperature_arrays, pressure_arrays, amperage_arrays
+    return time_array, temperature_arrays, pressure_arrays, amperage_arrays, vacuum_arrays
 
 
 

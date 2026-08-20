@@ -32,6 +32,9 @@ def MakeNewFile():
 
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_amperage_ports"):
             handle.write(f"Amp. port {sensor_number}\t")
+
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_vacuum_ports"):
+            handle.write(f"Vac. port {sensor_number}\t")
         
         handle.write(f"\n")
         
