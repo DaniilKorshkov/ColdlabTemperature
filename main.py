@@ -72,7 +72,7 @@ def vacuum_update_frame(i):
 
         vacax.plot(time_array, vacuum_arrays[vacuum_array_key], color = colorlist[i])
         try:
-            if len(vacuum_arrays_arrays[vacuum_array_key]) > 0:
+            if len(vacuum_arrays[vacuum_array_key]) > 0:
                 vacuumlegend.append(f"{legend_dictionary[vacuum_array_key]}: {vacuum_arrays[vacuum_array_key][-1]} Pa")
             else:
                 vacuumlegend.append(legend_dictionary[vacuum_array_key])
@@ -535,7 +535,7 @@ def main():
 
             try:
                 for i in range(6):
-                    vacuum_output.append(ret[(2*i + 1)])
+                    vacuum_output.append(tmp[(2*i + 1)])
             
             except:
                 vacuum_output = []
@@ -547,7 +547,7 @@ def main():
 
         #-------------------------- Appending log file --------------------------------------
 
-        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_amperage) or ( do_amperage and len(amperage_output) == 8)) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 12)  ):
+        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_amperage) or ( do_amperage and len(amperage_output) == 8)) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 6)  ):
 
 
             current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
