@@ -40,13 +40,13 @@ def vacuum_update_frame(i):
     vacax.cla()
     #pressax.clear()
 
-    vacax.set_title(f"Vacuum (pa vs time)")
+    vacax.set_title(f"Vacuum (Pa vs time)")
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
 
     vacax.set_xlabel(f'Time')
-    vacax.set_ylabel("Temperature oC")
+    vacax.set_ylabel("Pressure (Pa)")
 
     vacax.set_xscale('linear')
     vacax.set_yscale('linear')
@@ -73,12 +73,12 @@ def vacuum_update_frame(i):
         vacax.plot(time_array, vacuum_arrays[vacuum_array_key], color = colorlist[i])
         try:
             if len(vacuum_arrays_arrays[vacuum_array_key]) > 0:
-                vacuumlegend.append(f"{legend_dictionary[vacuum_array_key]}: {vacuum_arrays[vacuum_array_key][-1]}")
+                vacuumlegend.append(f"{legend_dictionary[vacuum_array_key]}: {vacuum_arrays[vacuum_array_key][-1]} Pa")
             else:
                 vacuumlegend.append(legend_dictionary[vacuum_array_key])
         except:
             if len(vacuum_arrays[vacuum_array_key]) > 0:
-                vacuumlegend.append(f"{vacuum_array_key}: {vacuum_arrays[vacuum_array_key][-1]}")
+                vacuumlegend.append(f"{vacuum_array_key}: {vacuum_arrays[vacuum_array_key][-1]} Pa")
             else:
                 vacuumlegend.append(vacuum_array_key)
         i += 1
@@ -104,13 +104,13 @@ def temperature_update_frame(i):
     tempax.cla()
     #pressax.clear()
 
-    tempax.set_title(f"Temperature (oC vs time)")
+    tempax.set_title(f"Temperature (°C vs time)")
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
 
     tempax.set_xlabel(f'Time')
-    tempax.set_ylabel("Temperature oC")
+    tempax.set_ylabel("Temperature (°C)")
 
     tempax.set_xscale('linear')
     tempax.set_yscale('linear')
@@ -137,12 +137,12 @@ def temperature_update_frame(i):
         tempax.plot(time_array, temperature_arrays[temperature_array_key], color = colorlist[i])
         try:
             if len(temperature_arrays[temperature_array_key]) > 0:
-                temperaturelegend.append(f"{legend_dictionary[temperature_array_key]}: {temperature_arrays[temperature_array_key][-1]}")
+                temperaturelegend.append(f"{legend_dictionary[temperature_array_key]}: {temperature_arrays[temperature_array_key][-1]}°C")
             else:
                 temperaturelegend.append(legend_dictionary[temperature_array_key])
         except:
             if len(temperature_arrays[temperature_array_key]) > 0:
-                temperaturelegend.append(f"{temperature_array_key}: {temperature_arrays[temperature_array_key][-1]}")
+                temperaturelegend.append(f"{temperature_array_key}: {temperature_arrays[temperature_array_key][-1]}°C")
             else:
                 temperaturelegend.append(temperature_array_key)
         i += 1
@@ -197,12 +197,12 @@ def amperage_update_frame(i):
         ampax.plot(time_array, amperage_arrays[amperage_array_key], color = colorlist[i])
         try:
             if len(amperage_arrays[amperage_array_key]) > 0:
-                amperagelegend.append(f"{legend_dictionary[amperage_array_key]}: {amperage_arrays[amperage_array_key][-1]}")
+                amperagelegend.append(f"{legend_dictionary[amperage_array_key]}: {amperage_arrays[amperage_array_key][-1]} A")
             else:
                 amperagelegend.append(f"{legend_dictionary[amperage_array_key]}")
         except:
             if len(amperage_arrays[amperage_array_key]) > 0:
-                amperagelegend.append(f"{amperage_array_key}: {amperage_arrays[amperage_array_key][-1]}")
+                amperagelegend.append(f"{amperage_array_key}: {amperage_arrays[amperage_array_key][-1]} A")
             else:
                 amperagelegend.append(f"{amperage_array_key}")
         i += 1
@@ -225,13 +225,13 @@ def pressure_update_frame(i):
     pressax.cla()
     #pressax.clear()
 
-    pressax.set_title(f"Pressure (torr?? vs time)")
+    pressax.set_title(f"Pressure (torr vs time)")
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
 
     pressax.set_xlabel(f'Time')
-    pressax.set_ylabel("Pressure torr")
+    pressax.set_ylabel("Pressure (torr)")
 
     pressax.set_xscale('linear')
     pressax.set_yscale('linear')
@@ -258,12 +258,12 @@ def pressure_update_frame(i):
         pressax.plot(time_array, pressure_arrays[pressure_array_key], color = colorlist[i])
         try:
             if len(pressure_arrays[pressure_array_key]) > 0:
-                pressurelegend.append(f"{legend_dictionary[pressure_array_key]}: {pressure_arrays[pressure_array_key][-1]}")
+                pressurelegend.append(f"{legend_dictionary[pressure_array_key]}: {pressure_arrays[pressure_array_key][-1]} torr")
             else:
                 pressurelegend.append(legend_dictionary[pressure_array_key])
         except:
             if len(pressure_arrays[pressure_array_key]) > 0:
-                temperaturelegend.append(f"{temperature_array_key}: {temperature_arrays[temperature_array_key][-1]}")
+                temperaturelegend.append(f"{temperature_array_key}: {temperature_arrays[temperature_array_key][-1]} torr")
             else:
                 pressurelegend.append(pressure_array_key)
         i += 1
@@ -276,33 +276,37 @@ def pressure_update_frame(i):
 def initiate_frame():
 
     
-    global tempfig
-    tempfig = plt.figure()
-    #pressfig = plt.figure()
 
-    global tempax
-    tempax = tempfig.add_subplot(111)
-    #pressax = pressfig.add_subplot(111)
+    if do_temperature:
+        global tempfig
+        tempfig = plt.figure()
+        #pressfig = plt.figure()
 
-    global pressfig
-    pressfig = plt.figure()
-    #pressfig = plt.figure()
+        global tempax
+        tempax = tempfig.add_subplot(111)
+        #pressax = pressfig.add_subplot(111)
 
-    global pressax
-    pressax = pressfig.add_subplot(111)
+    if do_pressure:
+        global pressfig
+        pressfig = plt.figure()
+        #pressfig = plt.figure()
 
-    
-    global ampfig
-    ampfig = plt.figure()
+        global pressax
+        pressax = pressfig.add_subplot(111)
 
-    global ampax
-    ampax = ampfig.add_subplot(111)
+    if do_amperage:
+        global ampfig
+        ampfig = plt.figure()
 
-    global vacfig
-    vacfig = plt.figure()
+        global ampax
+        ampax = ampfig.add_subplot(111)
 
-    global vacax
-    vacax = vacfig.add_subplot(111)
+    if do_vacuum:
+        global vacfig
+        vacfig = plt.figure()
+
+        global vacax
+        vacax = vacfig.add_subplot(111)
 
 
 
