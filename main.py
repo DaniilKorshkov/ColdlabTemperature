@@ -31,7 +31,7 @@ def vacuum_update_frame(i):
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
     raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
     vacax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
-    legend_dictionary = js.ReadJSONConfig("Dictionaries","RTD_dictionary")
+    legend_dictionary = js.ReadJSONConfig("Dictionaries","Vac_dictionary")
 
 
     time_array = [dt.datetime.fromtimestamp(element) for element in raw_time_array]
