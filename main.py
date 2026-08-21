@@ -278,54 +278,27 @@ def initiate_frame():
     
 
     if do_temperature:
-        global tempfig
+        global tempfig, tempax, tempani
         tempfig = plt.figure()
-        #pressfig = plt.figure()
-
-        global tempax
         tempax = tempfig.add_subplot(111)
-        #pressax = pressfig.add_subplot(111)
-
-    if do_pressure:
-        global pressfig
-        pressfig = plt.figure()
-        #pressfig = plt.figure()
-
-        global pressax
-        pressax = pressfig.add_subplot(111)
-
-    if do_amperage:
-        global ampfig
-        ampfig = plt.figure()
-
-        global ampax
-        ampax = ampfig.add_subplot(111)
-
-    if do_vacuum:
-        global vacfig
-        vacfig = plt.figure()
-
-        global vacax
-        vacax = vacfig.add_subplot(111)
-
-
-
-
-
-
-    
-
-    if do_pressure:
-        global pressani
-        pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
-    if do_temperature:
-        global tempani
         tempani = FuncAnimation(tempfig, temperature_update_frame, interval=1000)
+
+    if do_pressure:
+        global pressfig, pressax, pressani
+        pressfig = plt.figure()
+        pressax = pressfig.add_subplot(111)
+        pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
+
     if do_amperage:
-        global ampani
+        global ampfig, ampax, ampani
+        ampfig = plt.figure()
+        ampax = ampfig.add_subplot(111)
         ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
+
     if do_vacuum:
-        global vacani
+        global vacfig, vacax, vacani
+        vacfig = plt.figure()
+        vacax = vacfig.add_subplot(111)
         vacani = FuncAnimation(vacfig, vacuum_update_frame, interval=1000)
 
     plt.show(block=False)
@@ -404,10 +377,10 @@ def main():
 
     while True:
         inputline = str(input("Display graphs(y/n): "))
-        if inputline.lower() == "y":
+        if inputline.lower()[0] == "y":
             display_graphs = True
             break
-        elif inputline.lower() == "n":
+        elif inputline.lower()[0] == "n":
             display_graphs = False
             break
         else:
@@ -415,7 +388,7 @@ def main():
 
 
 
-    js.MergeJSONConfigs()
+    
 
     atexit.register(exit_handler)
     signal.signal(signal.SIGINT, kill_handler)
@@ -427,36 +400,59 @@ def main():
 
     if do_amperage:
 
-        PORT = js.ReadJSONConfig("Technical","arduino_address")
+       
+        arduino_found = False
+        for i in range(100):
+            if not arduino_found:
+                try:
+                    PORT = f"/dev/ttyACM{i}"
+                    ser = serial.Serial()
+                    ser.port = PORT
+                    ser.baudrate = 115200
+                    ser.timeout = 10
 
-        ser = serial.Serial()
-        ser.port = PORT
-        ser.baudrate = 115200
-        ser.timeout = 10
-
-        try:
-            ser.close()
-        except:
-            pass
-            
-        ser.open()
+                    try:
+                        ser.close()
+                    except:
+                        pass
+                        
+                    ser.open()
+                    arduino_found = True
+                    break
+                except:
+                    pass
+        
+        if not arduino_found:
+            raise Exception("Arduino not found")
 
     
     if do_vacuum:
 
-        VAC_PORT = js.ReadJSONConfig("Technical","vacuum_monitor_address")
+        vac_found = False
+        for i in range(100):
+            if not vac_found_found:
+                try:
+                VAC_PORT = f"/dev/ttyUSB{i}"
 
-        vac_ser = serial.Serial()
-        vac_ser.port = VAC_PORT
-        vac_ser.baudrate = 9600
-        vac_ser.timeout = 10
+                vac_ser = serial.Serial()
+                vac_ser.port = VAC_PORT
+                vac_ser.baudrate = 9600
+                vac_ser.timeout = 10
 
-        try:
-            vac_ser.close()
-        except:
-            pass
-            
-        vac_ser.open()
+                try:
+                    vac_ser.close()
+                except:
+                    pass
+                    
+                vac_ser.open()
+
+                vac_found = True
+                    break
+                except:
+                    pass
+        
+        if not vac_found:
+            raise Exception("Vacuum controller not found")
     
   
 
@@ -551,8 +547,16 @@ def main():
 
 
             current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
-            tempertaurelogentry, temperaturelist = sm.ReadAllTemperatures()
-            pressurelogentry, pressurelist = sm.ReadAllVoltages()
+
+            if do_temperature:
+                void, temperaturelist = sm.ReadAllTemperatures()
+            else:
+                temperaturelist = []
+
+            if do_pressure
+                void, pressurelist = sm.ReadAllVoltages()
+            else:
+                pressurelist = []
         
 
             handle = open(filename, "a")
