@@ -396,7 +396,49 @@ def main():
 
     
     global filename
-    filename = CreateNewFile.MakeNewFile()
+
+
+
+
+    while True:
+        filename = CreateNewFile.MakeNewFile()
+        
+        with open(filename,"r") as file_handle:
+            for line in file_handle:
+                first_line = line
+                break
+
+# ---------------- verify that same data poins are logged ---------------------
+        checkstring = "Current time \t\t"
+        for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports"):
+            checkstring+=f"Temp. port {sensor_number}\t"
+            
+        if do_temperature:
+            checkstring+=("\t")
+
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_voltage_ports"):
+            checkstring+=f"Press. port {sensor_number}\t"
+        
+        if do_pressure:
+            checkstring+=("\t")
+
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_amperage_ports"):
+            checkstring+=f"Amp. port {sensor_number}\t"
+
+        if do_amperage:
+            checkstring+=("\t")
+
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_vacuum_ports"):
+            checkstring+=f"Vac. port {sensor_number}\t"
+        
+        checkstring+="\n"
+
+        
+        if first_line == checkstring:
+            break
+        else:
+            print("Different preset logged into this file")
+
 
     if do_amperage:
 
@@ -432,21 +474,21 @@ def main():
         for i in range(100):
             if not vac_found_found:
                 try:
-                VAC_PORT = f"/dev/ttyUSB{i}"
+                    VAC_PORT = f"/dev/ttyUSB{i}"
 
-                vac_ser = serial.Serial()
-                vac_ser.port = VAC_PORT
-                vac_ser.baudrate = 9600
-                vac_ser.timeout = 10
+                    vac_ser = serial.Serial()
+                    vac_ser.port = VAC_PORT
+                    vac_ser.baudrate = 9600
+                    vac_ser.timeout = 10
 
-                try:
-                    vac_ser.close()
-                except:
-                    pass
-                    
-                vac_ser.open()
+                    try:
+                        vac_ser.close()
+                    except:
+                        pass
+                        
+                    vac_ser.open()
 
-                vac_found = True
+                    vac_found = True
                     break
                 except:
                     pass
@@ -553,7 +595,7 @@ def main():
             else:
                 temperaturelist = []
 
-            if do_pressure
+            if do_pressure:
                 void, pressurelist = sm.ReadAllVoltages()
             else:
                 pressurelist = []
@@ -563,9 +605,12 @@ def main():
             handle.write(f"{current_time}\t\t")
             for element in temperaturelist:
                 handle.write(f"{element}\t")
-            handle.write("\t")
+            if do_temperature:
+                handle.write("\t")
             for element in pressurelist:
                 handle.write(f"{element}\t")
+            if do_pressure:
+                handle.write("\t")
 
             i = 1
             for element in amperage_output:
@@ -573,6 +618,8 @@ def main():
                     handle.write(f"{element}\t")
 
                 i+=1
+            if do_amperage:
+                handle.write("\t")
 
             i = 1
             for element in vacuum_output:

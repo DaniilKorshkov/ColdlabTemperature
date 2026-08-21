@@ -22,16 +22,29 @@ def MakeNewFile():
         handle = open(filename,"a")
         handle.write(f"Current time \t\t")
         
+        do_temperature = False
         for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_temperature_ports"):
             handle.write(f"Temp. port {sensor_number}\t")
+            do_temperature = True
             
-        handle.write("\t")
+        if do_temperature:
+            handle.write("\t")
 
+        do_pressure = False
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_voltage_ports"):
             handle.write(f"Press. port {sensor_number}\t")
+            do_temperature = True
 
+        if do_temperature:
+            handle.write("\t")
+
+        do_amperage = False
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_amperage_ports"):
             handle.write(f"Amp. port {sensor_number}\t")
+            do_amperage = True
+
+        if do_amperage:
+            handle.write("\t")
 
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_vacuum_ports"):
             handle.write(f"Vac. port {sensor_number}\t")
