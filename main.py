@@ -472,7 +472,7 @@ def main():
 
         vac_found = False
         for i in range(100):
-            if not vac_found_found:
+            if not vac_found:
                 try:
                     VAC_PORT = f"/dev/ttyUSB{i}"
 
