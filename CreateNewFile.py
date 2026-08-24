@@ -35,7 +35,7 @@ def MakeNewFile():
             handle.write(f"Press. port {sensor_number}\t")
             do_temperature = True
 
-        if do_temperature:
+        if do_pressure:
             handle.write("\t")
 
         do_amperage = False
