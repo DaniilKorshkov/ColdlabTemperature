@@ -640,7 +640,68 @@ def main():
         
         plt.pause(0.01)
         
-        
+
+
+        if datetime.datetime.now().timestamp() > (interval + last_cycle_time + 3):
+            if do_vacuum:
+                try:
+                    vac_ser.close()
+                except:
+                    pass
+
+                vac_found = False
+                for i in range(100):
+                    if not vac_found:
+                        try:
+                            VAC_PORT = f"/dev/ttyUSB{i}"
+
+                            vac_ser = serial.Serial()
+                            vac_ser.port = VAC_PORT
+                            vac_ser.baudrate = 9600
+                            vac_ser.timeout = 10
+
+                            try:
+                                vac_ser.close()
+                            except:
+                                pass
+                                
+                            vac_ser.open()
+
+                            vac_found = True
+                            break
+                        except:
+                            pass
+            
+            if do_amperage:
+                try:
+                    ser.close()
+                except:
+                    pass
+                
+                arduino_found = False
+                for i in range(100):
+                    if not arduino_found:
+                        try:
+                            PORT = f"/dev/ttyACM{i}"
+                            ser = serial.Serial()
+                            ser.port = PORT
+                            ser.baudrate = 115200
+                            ser.timeout = 10
+
+                            try:
+                                ser.close()
+                            except:
+                                pass
+                                
+                            ser.open()
+                            arduino_found = True
+                            break
+                        except:
+                            pass
+                
+                if not arduino_found:
+                    raise Exception("Arduino not found")
+                
     
         
         
