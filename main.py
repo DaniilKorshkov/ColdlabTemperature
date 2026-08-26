@@ -554,6 +554,17 @@ def main():
                 else:
                     amperage_output.append( ((element.strip("Dev[0] CURR: ")).strip("Dev[1] CURR:" )).strip("\r") )
 
+            invalidate_reading = False
+            for element in amperage_output:
+                try:
+                    void = float(element)
+                except:
+                    invalidate_reading = True
+                    break    
+            
+            if invalidate_reading:
+                amperage_output = []
+
         else:
             amperage_output = []
 
@@ -579,7 +590,19 @@ def main():
             
             except:
                 vacuum_output = []
-           
+
+            invalidate_reading = False
+            for element in vacuum_output:
+                try:
+                    void = float(element)
+                except:
+                    invalidate_reading = True
+                    break    
+            
+            if invalidate_reading:
+                vacuum_output = []           
+
+
 
         else:
             vacuum_output = []
