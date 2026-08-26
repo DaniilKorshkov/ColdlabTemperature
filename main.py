@@ -520,6 +520,8 @@ def main():
 
     if display_graphs:
        initiate_frame()
+
+    serial_repair_done_recently = True
     
 
 
@@ -588,6 +590,8 @@ def main():
         if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_amperage) or ( do_amperage and len(amperage_output) == 8)) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 6)  ):
 
 
+            serial_repair_done_recently = False
+
             current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
 
             if do_temperature:
@@ -642,7 +646,9 @@ def main():
         
 
 
-        if datetime.datetime.now().timestamp() > (interval + last_cycle_time + 3):
+        if (datetime.datetime.now().timestamp() > (interval + last_cycle_time + 3)) and not serial_repair_done_recently:
+            last_cycle_time = datetime.datetime.now().timestamp()
+            serial_repair_done_recently = True
             if do_vacuum:
                 try:
                     vac_ser.close()
