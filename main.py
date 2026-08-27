@@ -443,30 +443,18 @@ def main():
     if do_amperage:
 
        
-        arduino_found = False
-        for i in range(100):
-            if not arduino_found:
-                try:
-                    PORT = f"/dev/ttyACM{i}"
-                    ser = serial.Serial()
-                    ser.port = PORT
-                    ser.baudrate = 115200
-                    ser.timeout = 10
+        kps_address_1 = js.ReadJSONConfig("keysight_power_supply","address_1")
+        kps_address_2 = js.ReadJSONConfig("keysight_power_supply","address_2")
 
-                    try:
-                        ser.close()
-                    except:
-                        pass
-                        
-                    ser.open()
-                    arduino_found = True
-                    break
-                except:
-                    pass
-        
-        if not arduino_found:
-            raise Exception("Arduino not found")
+        rm = pyvisa.ResourceManager()
 
+        currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
+
+
+        if 1 in currently_processed_amperage_ports or 2 in currently_processed_amperage_ports or 3 in currently_processed_amperage_ports or 4 in currently_processed_amperage_ports:
+            kps_1 = rm.open_resource(kps_address_1)
+        if 5 in currently_processed_amperage_ports or 6 in currently_processed_amperage_ports or 7 in currently_processed_amperage_ports or 8 in currently_processed_amperage_ports:
+            kps_2 = rm.open_resource(kps_address_2)
     
     if do_vacuum:
 
@@ -533,37 +521,32 @@ def main():
         
         if do_amperage:
 
-            ret = ser.read_until(b"!END")
-            ret = ret.decode("utf-8")
-            ret = ret.replace("!START!", "").replace("!END", "")
+            min_wattage = js.ReadJSONConfig("deposition","min_wattage")
+            max_wattage = js.ReadJSONConfig("deposition","max_wattage")
+            resistance = js.ReadJSONConfig("deposition","resistance")
 
-            print(f"Amperage reading {ret}")
+            deposition_monitor_output_vector = sm.ReadAllAnalogInputs()
             
-            tmp = ret.split("\n")
-            tmp3 = []
+
+            current = ((min_wattage * (10 - deposition_monitor_output_vector[0]) + max_wattage * deposition_monitor_output_vector[0]) / (10*resistance))**0.5
+
+            kps_1.write(f"CURR {current}, @(1,2,3,4)")
+            #kps_2.write(f"CURR {}, @(1,2,3,4)")
+
+
             amperage_output = []
-            for element in tmp:
-                tmp2 = element.split(",")
-                for element in tmp2:
-                    tmp3.append(element)
+
+            for element in currently_processed_amperage_ports:
+                if element in [1,2,3,4]:
+                    ret = kps_1.query_ascii_values(f"MEAS:CURR?, @({element})")
+                    amperage_output.append(float(ret))
+                if element in [5,6,7,8]:
+                    ret = kps_2.query_ascii_values(f"MEAS:CURR?, @({element-4})")
+                    amperage_output.append(float(ret))
+
+
             
 
-            for element in tmp3:
-                if element == "":
-                    pass
-                else:
-                    amperage_output.append( ((element.strip("Dev[0] CURR: ")).strip("Dev[1] CURR:" )).strip("\r") )
-
-            invalidate_reading = False
-            for element in amperage_output:
-                try:
-                    void = float(element)
-                except:
-                    invalidate_reading = True
-                    break    
-            
-            if invalidate_reading:
-                amperage_output = []
 
         else:
             amperage_output = []
@@ -610,7 +593,7 @@ def main():
 
         #-------------------------- Appending log file --------------------------------------
 
-        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_amperage) or ( do_amperage and len(amperage_output) == 8)) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 6)  ):
+        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 6)  ):
 
 
             serial_repair_done_recently = False
@@ -638,13 +621,8 @@ def main():
                 handle.write(f"{element}\t")
             if do_pressure:
                 handle.write("\t")
-
-            i = 1
             for element in amperage_output:
-                if i in currently_processed_amperage_ports:
-                    handle.write(f"{element}\t")
-
-                i+=1
+                handle.write(f"{element}\t")
             if do_amperage:
                 handle.write("\t")
 
@@ -701,35 +679,7 @@ def main():
                         except:
                             pass
             
-            if do_amperage:
-                try:
-                    ser.close()
-                except:
-                    pass
-                
-                arduino_found = False
-                for i in range(100):
-                    if not arduino_found:
-                        try:
-                            PORT = f"/dev/ttyACM{i}"
-                            ser = serial.Serial()
-                            ser.port = PORT
-                            ser.baudrate = 115200
-                            ser.timeout = 10
-
-                            try:
-                                ser.close()
-                            except:
-                                pass
-                                
-                            ser.open()
-                            arduino_found = True
-                            break
-                        except:
-                            pass
-                
-                if not arduino_found:
-                    raise Exception("Arduino not found")
+            
                 
     
         

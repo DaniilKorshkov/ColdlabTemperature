@@ -55,6 +55,22 @@ def ReadAllVoltages():
     return ret, pressurearray
 
 
+
+def ReadAllAnalogInputs():
+    ret = ""
+    pressurearray = []
+    
+
+    for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_deposition_monitor_ports"):
+
+                    voltage = ReadVoltage((sensor_number//4)*4,((sensor_number%4)+1))
+                    voltagearray.append(voltage)
+                    
+    return voltagearray
+
+
+
+
 def RecordVoltageToLog(current_volt, filename):
     #current_volt, pressurearray = ReadAllVoltages()
     handle = open(filename,"a")
