@@ -217,7 +217,7 @@ def dm_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
     raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, dm_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
-    ampax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
+    dmax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","Dm_dictionary")
 
 
