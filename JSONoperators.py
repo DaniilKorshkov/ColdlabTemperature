@@ -265,7 +265,7 @@ def ReadCSV(filename, entries_to_display):
 
 
 
-                dm_arrays_arrays[sensor].append(float(splitline[i]))
+                dm_arrays[sensor].append(float(splitline[i]))
                 i += 1
 
                 if len(dm_arrays[sensor]) > entries_to_display:
