@@ -535,9 +535,9 @@ def main():
 
 
         if 1 in currently_processed_amperage_ports or 2 in currently_processed_amperage_ports or 3 in currently_processed_amperage_ports or 4 in currently_processed_amperage_ports:
-            kps_1 = rm.open_resource(kps_address_1, access_mode=AccessModes.no_lock)
+            kps_1 = rm.open_resource(kps_address_1)
         if 5 in currently_processed_amperage_ports or 6 in currently_processed_amperage_ports or 7 in currently_processed_amperage_ports or 8 in currently_processed_amperage_ports:
-            kps_2 = rm.open_resource(kps_address_2, access_mode=AccessModes.no_lock)
+            kps_2 = rm.open_resource(kps_address_2)
     
     if do_vacuum:
 
@@ -781,7 +781,17 @@ def exit_handler():
     try:
         vac_ser.close()
     except:
-        pass    
+        pass
+
+    try:
+        kps_1.close()
+    except:
+        pass
+
+    try:
+        kps_2.close()
+    except:
+        pass       
 
 def kill_handler(*args):
     sys.exit(0)
@@ -794,6 +804,16 @@ def kill_handler(*args):
         vac_serser.close()
     except:
         pass
+
+    try:
+        kps_1.close()
+    except:
+        pass
+
+    try:
+        kps_2.close()
+    except:
+        pass  
 
 if __name__ == "__main__":
     main()
