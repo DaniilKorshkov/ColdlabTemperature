@@ -39,14 +39,14 @@ def ReadVoltage(board_id, sensor_number):
     return ret
     
     
-def ReadAllVoltages():
+def ReadAllPressures():
     ret = ""
     pressurearray = []
     polynomes = js.ReadJSONConfig("Polynomes","polynomes")
 
-    for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_voltage_ports"):
+    for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_pressure_ports"):
 
-                    voltage = ReadVoltage((sensor_number//4)*4,((sensor_number%4)+1))
+                    voltage = ReadVoltage((sensor_number//4),((sensor_number%4)+1))
                     pressure = ((polynomes[sensor_number])[0])*voltage + ((polynomes[sensor_number])[1])
                     pressurearray.append(pressure)
                     ret = ret+"\t"+str(pressure)
@@ -58,12 +58,12 @@ def ReadAllVoltages():
 
 def ReadAllAnalogInputs():
     ret = ""
-    pressurearray = []
+    voltagearray = []
     
 
     for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_deposition_monitor_ports"):
 
-                    voltage = ReadVoltage((sensor_number//4)*4,((sensor_number%4)+1))
+                    voltage = ReadVoltage((sensor_number//4),((sensor_number%4)+1))
                     voltagearray.append(voltage)
                     
     return voltagearray

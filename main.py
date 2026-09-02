@@ -16,6 +16,9 @@ import PressureScreen
 import AmperageScreen
 
 
+import warnings
+warnings.filterwarnings("ignore")
+
 
 
 import matplotlib.pyplot as plt
@@ -29,7 +32,7 @@ import datetime as dt
 def vacuum_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, dm_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
     vacax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","Vac_dictionary")
 
@@ -40,7 +43,7 @@ def vacuum_update_frame(i):
     vacax.cla()
     #pressax.clear()
 
-    vacax.set_title(f"Vacuum (Pa vs time)")
+    vacax.set_title(f"Vacuum (mbar vs time)")
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
@@ -93,7 +96,7 @@ def vacuum_update_frame(i):
 def temperature_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, dm_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
     tempax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","RTD_dictionary")
 
@@ -153,7 +156,7 @@ def temperature_update_frame(i):
 def amperage_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, dm_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
     ampax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","Amp_dictionary")
 
@@ -210,11 +213,71 @@ def amperage_update_frame(i):
 
     ampax.legend(amperagelegend,loc=3)
 
+def dm_update_frame(i):
+
+    entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, dm_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
+    ampax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
+    legend_dictionary = js.ReadJSONConfig("Dictionaries","Dm_dictionary")
+
+
+    time_array = [dt.datetime.fromtimestamp(element) for element in raw_time_array]
+   
+
+    dmax.cla()
+    #pressax.clear()
+
+    dmax.set_title(f"Deposition rate (%) vs time")
+    colorlist = ['r','g','b','c','m','y','k','tab:brown']
+    i = 0
+
+
+    dmax.set_xlabel(f'Time')
+    dmax.set_ylabel("Deposition rate (%)")
+
+    dmax.set_xscale('linear')
+    dmax.set_yscale('linear')
+
+
+    dmax.xaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+    dmax.yaxis.grid(which='major', color='k', alpha=0.8, linestyle='--', linewidth=1)
+
+    dmax.xaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+    dmax.yaxis.grid(which='minor', color='k', alpha=0.5, linestyle=':', linewidth=0.75)
+
+
+    
+    dmax.tick_params('x', labelrotation=90)
+    
+    dmlegend = []
+
+
+    for dm_array_key in dm_arrays:
+
+
+       
+
+        dmax.plot(time_array, dm_arrays[dm_array_key], color = colorlist[i])
+        try:
+            if len(dm_arrays[dm_array_key]) > 0:
+                dmlegend.append(f"{legend_dictionary[dm_array_key]}: {dm_arrays[dm_array_key][-1]} A")
+            else:
+                dmlegend.append(f"{legend_dictionary[dm_array_key]}")
+        except:
+            if len(dm_arrays[dm_array_key]) > 0:
+                dmlegend.append(f"{dm_array_key}: {dm_arrays[dm_array_key][-1]} A")
+            else:
+                dmgend.append(f"{dm_array_key}")
+        i += 1
+    
+
+    dmax.legend(dmlegend,loc=3)
+
 
 def pressure_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
-    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
+    raw_time_array, temperature_arrays, pressure_arrays, amperage_arrays, dm_arrays, vacuum_arrays = js.ReadCSV(filename,entries_to_display)
     pressax.xaxis.set_major_formatter(DateFormatter('%H-%M-%S'))
     legend_dictionary = js.ReadJSONConfig("Dictionaries","Press_dictionary")
 
@@ -295,6 +358,12 @@ def initiate_frame():
         ampax = ampfig.add_subplot(111)
         ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
 
+    if do_deposition_monitor:
+        global dmfig, dmax, dmani
+        dmfig = plt.figure()
+        dmax = dmfig.add_subplot(111)
+        dmani = FuncAnimation(dmfig, dm_update_frame, interval=1000)
+
     if do_vacuum:
         global vacfig, vacax, vacani
         vacfig = plt.figure()
@@ -329,6 +398,7 @@ def modify_config_from_preset():
     old_line_json["currently_processed_voltage_ports"] = (presets_list[selection-1])["currently_processed_voltage_ports"]
     old_line_json["currently_processed_amperage_ports"] = (presets_list[selection-1])["currently_processed_amperage_ports"]
     old_line_json["currently_processed_vacuum_ports"] = (presets_list[selection-1])["currently_processed_vacuum_ports"]
+    old_line_json["currently_processed_deposition_monitor_ports"] = (presets_list[selection-1])["currently_processed_deposition_monitor_ports"]
 
 
     new_line = json.dumps(old_line_json)
@@ -346,7 +416,7 @@ def main():
     js.MergeJSONConfigs()
     modify_config_from_preset()
 
-    global do_amperage, do_pressure, do_temperature, do_vacuum
+    global do_amperage, do_pressure, do_temperature, do_vacuum, do_deposition_monitor
 
 
     currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
@@ -354,6 +424,12 @@ def main():
         do_amperage = True
     else:
         do_amperage = False
+
+    currently_processed_deposition_monitor_ports = js.ReadJSONConfig("RTD_options","currently_processed_deposition_monitor_ports")
+    if len(currently_processed_deposition_monitor_ports) > 0:
+        do_deposition_monitor = True
+    else:
+        do_deposition_monitor = False
 
     currently_processed_pressure_ports = js.ReadJSONConfig("RTD_options","currently_processed_voltage_ports")
     if len(currently_processed_pressure_ports) > 0:
@@ -426,6 +502,12 @@ def main():
             checkstring+=f"Amp. port {sensor_number}\t"
 
         if do_amperage:
+            checkstring+=("\t")
+
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_deposition_monitor_ports"):
+            checkstring+=f"DM. port {sensor_number}\t"
+
+        if do_deposition_monitor:
             checkstring+=("\t")
 
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_vacuum_ports"):
@@ -606,7 +688,7 @@ def main():
                 temperaturelist = []
 
             if do_pressure:
-                void, pressurelist = sm.ReadAllVoltages()
+                void, pressurelist = sm.ReadAllPressures()
             else:
                 pressurelist = []
         
@@ -624,6 +706,10 @@ def main():
             for element in amperage_output:
                 handle.write(f"{element}\t")
             if do_amperage:
+                handle.write("\t")
+            for element in deposition_monitor_output_vector:
+                handle.write(f"{(element*10)}\t")
+            if do_deposition_monitor:
                 handle.write("\t")
 
             i = 1
