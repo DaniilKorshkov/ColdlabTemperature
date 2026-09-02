@@ -261,12 +261,12 @@ def dm_update_frame(i):
         dmax.plot(time_array, dm_arrays[dm_array_key], color = colorlist[i])
         try:
             if len(dm_arrays[dm_array_key]) > 0:
-                dmlegend.append(f"{legend_dictionary[dm_array_key]}: {dm_arrays[dm_array_key][-1]} A")
+                dmlegend.append(f"{legend_dictionary[dm_array_key]}: {dm_arrays[dm_array_key][-1]} %")
             else:
                 dmlegend.append(f"{legend_dictionary[dm_array_key]}")
         except:
             if len(dm_arrays[dm_array_key]) > 0:
-                dmlegend.append(f"{dm_array_key}: {dm_arrays[dm_array_key][-1]} A")
+                dmlegend.append(f"{dm_array_key}: {dm_arrays[dm_array_key][-1]} %")
             else:
                 dmgend.append(f"{dm_array_key}")
         i += 1
