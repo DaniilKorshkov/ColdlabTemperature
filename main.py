@@ -4,6 +4,7 @@ import datetime
 import CreateNewFile
 import matplotlib.pyplot as plt
 import serial
+import pyvisa
 
 import JSONoperators as js
 import json
