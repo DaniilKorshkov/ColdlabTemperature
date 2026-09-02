@@ -395,7 +395,7 @@ def modify_config_from_preset():
     old_line_json = js.ReadJSONConfig("RTD_options")
 
     old_line_json["currently_processed_temperature_ports"] = (presets_list[selection-1])["currently_processed_temperature_ports"]
-    old_line_json["currently_processed_voltage_ports"] = (presets_list[selection-1])["currently_processed_voltage_ports"]
+    old_line_json["currently_processed_pressure_ports"] = (presets_list[selection-1])["currently_processed_pressure_ports"]
     old_line_json["currently_processed_amperage_ports"] = (presets_list[selection-1])["currently_processed_amperage_ports"]
     old_line_json["currently_processed_vacuum_ports"] = (presets_list[selection-1])["currently_processed_vacuum_ports"]
     old_line_json["currently_processed_deposition_monitor_ports"] = (presets_list[selection-1])["currently_processed_deposition_monitor_ports"]
@@ -431,7 +431,7 @@ def main():
     else:
         do_deposition_monitor = False
 
-    currently_processed_pressure_ports = js.ReadJSONConfig("RTD_options","currently_processed_voltage_ports")
+    currently_processed_pressure_ports = js.ReadJSONConfig("RTD_options","currently_processed_pressure_ports")
     if len(currently_processed_pressure_ports) > 0:
         do_pressure = True
     else:
@@ -492,7 +492,7 @@ def main():
         if do_temperature:
             checkstring+=("\t")
 
-        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_voltage_ports"):
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_pressure_ports"):
             checkstring+=f"Press. port {sensor_number}\t"
         
         if do_pressure:
