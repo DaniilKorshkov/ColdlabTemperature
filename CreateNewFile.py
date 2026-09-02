@@ -47,7 +47,7 @@ def MakeNewFile():
             handle.write("\t")
 
         do_deposition_monitor = False
-        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_deposition_monitor_ports_ports"):
+        for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_deposition_monitor_ports"):
             handle.write(f"DM. port {sensor_number}\t")
             do_deposition_monitor = True
 
