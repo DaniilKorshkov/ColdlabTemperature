@@ -30,12 +30,6 @@ from matplotlib.dates import DateFormatter
 import datetime as dt
 
 
-def signal_handler(signal, frame):
-        global interrupted
-        interrupted = True
-        print(f"Interruption request received. Sampling will be terminated soon")
-        
-
 def vacuum_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
@@ -427,7 +421,8 @@ def main():
 
     global interrupted
     interrupted = False
-    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGINT, kill_handler)
+    signal.signal(signal.SIGTERM, kill_handler)
 
 
     currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
@@ -478,8 +473,6 @@ def main():
     
 
     atexit.register(exit_handler)
-    signal.signal(signal.SIGINT, kill_handler)
-    signal.signal(signal.SIGTERM, kill_handler)
 
     
     global filename
@@ -808,26 +801,8 @@ def exit_handler():
         pass       
 
 def kill_handler(*args):
+    exit_handler()
     sys.exit(0)
-    try:
-        ser.close()
-    except:
-        pass
-
-    try:
-        vac_serser.close()
-    except:
-        pass
-
-    try:
-        kps_1.close()
-    except:
-        pass
-
-    try:
-        kps_2.close()
-    except:
-        pass  
 
 if __name__ == "__main__":
     main()
