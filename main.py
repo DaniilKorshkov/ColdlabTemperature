@@ -535,9 +535,9 @@ def main():
 
 
         if 1 in currently_processed_amperage_ports or 2 in currently_processed_amperage_ports or 3 in currently_processed_amperage_ports or 4 in currently_processed_amperage_ports:
-            kps_1 = rm.open_resource(kps_address_1)
+            kps_1 = rm.open_resource(kps_address_1, access_mode=AccessModes.no_lock)
         if 5 in currently_processed_amperage_ports or 6 in currently_processed_amperage_ports or 7 in currently_processed_amperage_ports or 8 in currently_processed_amperage_ports:
-            kps_2 = rm.open_resource(kps_address_2)
+            kps_2 = rm.open_resource(kps_address_2, access_mode=AccessModes.no_lock)
     
     if do_vacuum:
 
