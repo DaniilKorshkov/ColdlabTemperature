@@ -408,174 +408,16 @@ def modify_config_from_preset():
 
 
 
-def monitoring_loop(interval, currently_processed_amperage_ports):
-    global interrupted, filename, kps_1, kps_2, vac_ser, currently_processed_vacuum_ports
-    global do_amperage, do_pressure, do_temperature, do_vacuum, do_deposition_monitor
-
-    last_cycle_time = 0
-    serial_repair_done_recently = True
-
-    while True:
-        if interrupted:
-            break
-
-        if do_amperage:
-
-            min_wattage = js.ReadJSONConfig("deposition","min_wattage")
-            max_wattage = js.ReadJSONConfig("deposition","max_wattage")
-            resistance = js.ReadJSONConfig("deposition","resistance")
-
-            deposition_monitor_output_vector = sm.ReadAllAnalogInputs()
-
-
-            current = ((min_wattage * (10 - deposition_monitor_output_vector[0]) + max_wattage * deposition_monitor_output_vector[0]) / (10*resistance))**0.5
-
-            kps_1.write(f"CURR {current},(@1,2,3,4)")
-
-            amperage_output = []
-
-            for element in currently_processed_amperage_ports:
-                if element in [1,2,3,4]:
-                    ret = kps_1.query_ascii_values(f"MEAS:CURR?, (@{element})")
-                    amperage_output.append(float(ret))
-                if element in [5,6,7,8]:
-                    ret = kps_2.query_ascii_values(f"MEAS:CURR?, (@{element-4})")
-                    amperage_output.append(float(ret))
-
-        else:
-            amperage_output = []
-            deposition_monitor_output_vector = []
-
-        if do_vacuum:
-
-            ret = vac_ser.readline().decode("utf-8").strip()
-
-            print(f"Vacuum reading {ret}")
-
-            vacuum_output = []
-
-            tmp = ret.split(",")
-
-            try:
-                for i in range(6):
-                    vacuum_output.append(tmp[(2*i + 1)])
-            except:
-                vacuum_output = []
-
-            invalidate_reading = False
-            for element in vacuum_output:
-                try:
-                    void = float(element)
-                except:
-                    invalidate_reading = True
-                    break
-
-            if invalidate_reading:
-                vacuum_output = []
-
-        else:
-            vacuum_output = []
-
-        #-------------------------- Appending log file --------------------------------------
-
-        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 6)  ):
-
-            serial_repair_done_recently = False
-
-            current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
-
-            if do_temperature:
-                void, temperaturelist = sm.ReadAllTemperatures()
-            else:
-                temperaturelist = []
-
-            if do_pressure:
-                void, pressurelist = sm.ReadAllPressures()
-            else:
-                pressurelist = []
-
-            handle = open(filename, "a")
-            handle.write(f"{current_time}\t\t")
-            for element in temperaturelist:
-                handle.write(f"{element}\t")
-            if do_temperature:
-                handle.write("\t")
-            for element in pressurelist:
-                handle.write(f"{element}\t")
-            if do_pressure:
-                handle.write("\t")
-            for element in amperage_output:
-                handle.write(f"{element}\t")
-            if do_amperage:
-                handle.write("\t")
-            for element in deposition_monitor_output_vector:
-                handle.write(f"{(element*10)}\t")
-            if do_deposition_monitor:
-                handle.write("\t")
-
-            i = 1
-            for element in vacuum_output:
-                if i in currently_processed_vacuum_ports:
-                    handle.write(f"{element}\t")
-                i+=1
-
-            handle.write("\n")
-            handle.close()
-
-            last_cycle_time = datetime.datetime.now().timestamp()
-
-        plt.pause(0.01)
-
-        if (datetime.datetime.now().timestamp() > (interval + last_cycle_time + 3)) and not serial_repair_done_recently:
-            last_cycle_time = datetime.datetime.now().timestamp()
-            serial_repair_done_recently = True
-            if do_vacuum:
-                try:
-                    vac_ser.close()
-                except:
-                    pass
-
-                vac_found = False
-                for i in range(100):
-                    if not vac_found:
-                        try:
-                            VAC_PORT = f"/dev/ttyUSB{i}"
-
-                            vac_ser = serial.Serial()
-                            vac_ser.port = VAC_PORT
-                            vac_ser.baudrate = 9600
-                            vac_ser.timeout = 10
-
-                            try:
-                                vac_ser.close()
-                            except:
-                                pass
-
-                            vac_ser.open()
-
-                            vac_found = True
-                            break
-                        except:
-                            pass
-
-
-
 def main():
 
 
 
     #------------------------------ initiation --------------------------------------------
 
-    global do_amperage, do_pressure, do_temperature, do_vacuum, do_deposition_monitor
-    global filename, kps_1, kps_2, vac_ser, currently_processed_vacuum_ports
-
-    global interrupted
-    interrupted = False
-    signal.signal(signal.SIGINT, kill_handler)
-    signal.signal(signal.SIGTERM, kill_handler)
-
     js.MergeJSONConfigs()
     modify_config_from_preset()
+
+    global do_amperage, do_pressure, do_temperature, do_vacuum, do_deposition_monitor
 
 
     currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
@@ -626,6 +468,8 @@ def main():
     
 
     atexit.register(exit_handler)
+    signal.signal(signal.SIGINT, kill_handler)
+    signal.signal(signal.SIGTERM, kill_handler)
 
     
     global filename
@@ -691,11 +535,9 @@ def main():
 
 
         if 1 in currently_processed_amperage_ports or 2 in currently_processed_amperage_ports or 3 in currently_processed_amperage_ports or 4 in currently_processed_amperage_ports:
-            kps_1 = rm.open_resource(kps_address_1)
-            kps_1.timeout = 2000
+            kps_1 = rm.open_resource(kps_address_1, access_mode=pyvisa.constants.AccessModes.no_lock)
         if 5 in currently_processed_amperage_ports or 6 in currently_processed_amperage_ports or 7 in currently_processed_amperage_ports or 8 in currently_processed_amperage_ports:
-            kps_2 = rm.open_resource(kps_address_2)
-            kps_2.timeout = 2000
+            kps_2 = rm.open_resource(kps_address_2, access_mode=pyvisa.constants.AccessModes.no_lock)
     
     if do_vacuum:
 
@@ -750,43 +592,209 @@ def main():
     if display_graphs:
        initiate_frame()
 
+    serial_repair_done_recently = True
+    
+
+
     #------------------------------ infinite cycle --------------------------------------------
     
-    try:
-        monitoring_loop(interval, currently_processed_amperage_ports)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        exit_handler()
+    
+    while True:
+
+        
+        if do_amperage:
+
+            min_wattage = js.ReadJSONConfig("deposition","min_wattage")
+            max_wattage = js.ReadJSONConfig("deposition","max_wattage")
+            resistance = js.ReadJSONConfig("deposition","resistance")
+
+            deposition_monitor_output_vector = sm.ReadAllAnalogInputs()
+            
+
+            current = ((min_wattage * (10 - deposition_monitor_output_vector[0]) + max_wattage * deposition_monitor_output_vector[0]) / (10*resistance))**0.5
+
+            kps_1.write(f"CURR {current},(@1,2,3,4)")
+            #kps_2.write(f"CURR {}, @(1,2,3,4)")
+
+
+            amperage_output = []
+
+            for element in currently_processed_amperage_ports:
+                if element in [1,2,3,4]:
+                    ret = kps_1.query_ascii_values(f"MEAS:CURR? (@{element})")
+                    amperage_output.append(float(ret))
+                if element in [5,6,7,8]:
+                    ret = kps_2.query_ascii_values(f"MEAS:CURR? (@{element-4})")
+                    amperage_output.append(float(ret))
+
+
+            
+
+
+        else:
+            amperage_output = []
+
+        
+        
+
+        
+        if do_vacuum:
+
+            ret = vac_ser.readline().decode("utf-8").strip()
+            
+
+            print(f"Vacuum reading {ret}")
+            
+            
+            vacuum_output = []
+
+            tmp = ret.split(",")
+
+            try:
+                for i in range(6):
+                    vacuum_output.append(tmp[(2*i + 1)])
+            
+            except:
+                vacuum_output = []
+
+            invalidate_reading = False
+            for element in vacuum_output:
+                try:
+                    void = float(element)
+                except:
+                    invalidate_reading = True
+                    break    
+            
+            if invalidate_reading:
+                vacuum_output = []           
 
 
 
+        else:
+            vacuum_output = []
+        
 
+        #-------------------------- Appending log file --------------------------------------
+
+        if (datetime.datetime.now().timestamp() > interval + last_cycle_time) and ( (not do_vacuum) or ( do_vacuum and len(vacuum_output) == 6)  ):
+
+
+            serial_repair_done_recently = False
+
+            current_time = (datetime.datetime.now()).strftime("%Y-%h-%d %H:%M:%S")
+
+            if do_temperature:
+                void, temperaturelist = sm.ReadAllTemperatures()
+            else:
+                temperaturelist = []
+
+            if do_pressure:
+                void, pressurelist = sm.ReadAllPressures()
+            else:
+                pressurelist = []
+        
+
+            handle = open(filename, "a")
+            handle.write(f"{current_time}\t\t")
+            for element in temperaturelist:
+                handle.write(f"{element}\t")
+            if do_temperature:
+                handle.write("\t")
+            for element in pressurelist:
+                handle.write(f"{element}\t")
+            if do_pressure:
+                handle.write("\t")
+            for element in amperage_output:
+                handle.write(f"{element}\t")
+            if do_amperage:
+                handle.write("\t")
+            for element in deposition_monitor_output_vector:
+                handle.write(f"{(element*10)}\t")
+            if do_deposition_monitor:
+                handle.write("\t")
+
+            i = 1
+            for element in vacuum_output:
+                if i in currently_processed_vacuum_ports:
+                    handle.write(f"{element}\t")
+
+                i+=1 
+                        
+            handle.write("\n")
+            handle.close()
+
+            
+            
+            
+
+            last_cycle_time = datetime.datetime.now().timestamp()
+
+        
+        plt.pause(0.01)
+        
+
+
+        if (datetime.datetime.now().timestamp() > (interval + last_cycle_time + 3)) and not serial_repair_done_recently:
+            last_cycle_time = datetime.datetime.now().timestamp()
+            serial_repair_done_recently = True
+            if do_vacuum:
+                try:
+                    vac_ser.close()
+                except:
+                    pass
+
+                vac_found = False
+                for i in range(100):
+                    if not vac_found:
+                        try:
+                            VAC_PORT = f"/dev/ttyUSB{i}"
+
+                            vac_ser = serial.Serial()
+                            vac_ser.port = VAC_PORT
+                            vac_ser.baudrate = 9600
+                            vac_ser.timeout = 10
+
+                            try:
+                                vac_ser.close()
+                            except:
+                                pass
+                                
+                            vac_ser.open()
+
+                            vac_found = True
+                            break
+                        except:
+                            pass
+            
+            
+                
+    
+        
+        
 def exit_handler():
     plt.close('all')
+    try:
+        ser.close()
+    except:
+        pass
 
     try:
         vac_ser.close()
     except:
-        pass
-
-    try:
-        kps_1.close()
-    except:
-        pass
-
-    try:
-        kps_2.close()
-    except:
-        pass
+        pass    
 
 def kill_handler(*args):
-    raise KeyboardInterrupt
+    sys.exit(0)
+    try:
+        ser.close()
+    except:
+        pass
+
+    try:
+        vac_serser.close()
+    except:
+        pass
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        exit_handler()
-        sys.exit(0)
+    main()
 
