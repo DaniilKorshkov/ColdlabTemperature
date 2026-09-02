@@ -621,10 +621,10 @@ def main():
 
             for element in currently_processed_amperage_ports:
                 if element in [1,2,3,4]:
-                    ret = kps_1.query_ascii_values(f"MEAS:CURR? (@{element})")
+                    ret = kps_1.query(f"MEAS:CURR? (@{element})")
                     amperage_output.append(float(ret))
                 if element in [5,6,7,8]:
-                    ret = kps_2.query_ascii_values(f"MEAS:CURR? (@{element-4})")
+                    ret = kps_2.querys(f"MEAS:CURR? (@{element-4})")
                     amperage_output.append(float(ret))
 
 
