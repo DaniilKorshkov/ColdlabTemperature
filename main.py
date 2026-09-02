@@ -780,10 +780,6 @@ def main():
         
 def exit_handler():
     plt.close('all')
-    try:
-        ser.close()
-    except:
-        pass
 
     try:
         vac_ser.close()
@@ -798,11 +794,11 @@ def exit_handler():
     try:
         kps_2.close()
     except:
-        pass       
+        pass
 
 def kill_handler(*args):
-    exit_handler()
-    sys.exit(0)
+    global interrupted
+    interrupted = True
 
 if __name__ == "__main__":
     main()
