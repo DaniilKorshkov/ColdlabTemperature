@@ -30,6 +30,12 @@ from matplotlib.dates import DateFormatter
 import datetime as dt
 
 
+def signal_handler(signal, frame):
+        global interrupted
+        interrupted = True
+        print(f"Interruption request received. Sampling will be terminated soon")
+        
+
 def vacuum_update_frame(i):
 
     entries_to_display = js.ReadJSONConfig("RTD_options","entriestodisplay")
@@ -419,6 +425,10 @@ def main():
 
     global do_amperage, do_pressure, do_temperature, do_vacuum, do_deposition_monitor
 
+    global interrupted
+    interrupted = False
+    signal.signal(signal.SIGINT, signal_handler)
+
 
     currently_processed_amperage_ports = js.ReadJSONConfig("RTD_options","currently_processed_amperage_ports")
     if len(currently_processed_amperage_ports) > 0:
@@ -601,6 +611,10 @@ def main():
     
     while True:
 
+
+        if interrupted:
+            exit_handler()
+            break
         
         if do_amperage:
 
