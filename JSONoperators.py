@@ -201,90 +201,95 @@ def ReadCSV(filename, entries_to_display):
         else:  #handle other lines
 
     
+            try:
 
-            splitline = line.split('\t')
-
-            
-            utc_time = (datetime.datetime.fromtimestamp(time.mktime(time.strptime(splitline[0],"%Y-%b-%d %H:%M:%S")))).timestamp()
-    
-
-            time_array.append(utc_time)
-            if len(time_array) > entries_to_display:
-                    time_array.pop(0)
-
-            
-            i = 1
-
-            for sensor in temperature_sensors_list:
-
-                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
-                    i += 1
-
-
-                temperature_arrays[sensor].append(float(splitline[i]))
-                i += 1
-
-
-                if len(temperature_arrays[sensor]) > entries_to_display:
-                    temperature_arrays[sensor].pop(0)
-
-
-            for sensor in pressure_sensors_list:
+                splitline = line.split('\t')
 
                 
-                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
-                    i += 1
+                utc_time = (datetime.datetime.fromtimestamp(time.mktime(time.strptime(splitline[0],"%Y-%b-%d %H:%M:%S")))).timestamp()
+        
 
-
-
-                pressure_arrays[sensor].append(float(splitline[i]))
-                i += 1
-
-                if len(pressure_arrays[sensor]) > entries_to_display:
-                    pressure_arrays[sensor].pop(0)
-
-            for sensor in amperage_sensors_list:
+                time_array.append(utc_time)
+                if len(time_array) > entries_to_display:
+                        time_array.pop(0)
 
                 
-                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                i = 1
+
+                for sensor in temperature_sensors_list:
+
+                    while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                        i += 1
+
+
+                    temperature_arrays[sensor].append(float(splitline[i]))
                     i += 1
 
 
+                    if len(temperature_arrays[sensor]) > entries_to_display:
+                        temperature_arrays[sensor].pop(0)
 
-                amperage_arrays[sensor].append(float(splitline[i]))
-                i += 1
 
-                if len(amperage_arrays[sensor]) > entries_to_display:
-                    amperage_arrays[sensor].pop(0)
+                for sensor in pressure_sensors_list:
 
-            for sensor in dm_sensors_list:
+                    
+                    while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                        i += 1
 
+
+
+                    pressure_arrays[sensor].append(float(splitline[i]))
+                    i += 1
+
+                    if len(pressure_arrays[sensor]) > entries_to_display:
+                        pressure_arrays[sensor].pop(0)
+
+                for sensor in amperage_sensors_list:
+
+                    
+                    while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                        i += 1
+
+
+
+                    amperage_arrays[sensor].append(float(splitline[i]))
+                    i += 1
+
+                    if len(amperage_arrays[sensor]) > entries_to_display:
+                        amperage_arrays[sensor].pop(0)
+
+                for sensor in dm_sensors_list:
+
+                    
+                    while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                        i += 1
+
+
+
+                    dm_arrays[sensor].append(float(splitline[i]))
+                    i += 1
+
+                    if len(dm_arrays[sensor]) > entries_to_display:
+                        dm_arrays[sensor].pop(0)
                 
-                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+
+                for sensor in vacuum_sensors_list:
+
+                    
+                    while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
+                        i += 1
+
+
+
+                    vacuum_arrays[sensor].append(float(splitline[i]))
                     i += 1
 
+                    if len(vacuum_arrays[sensor]) > entries_to_display:
+                        vacuum_arrays[sensor].pop(0)
 
 
-                dm_arrays[sensor].append(float(splitline[i]))
-                i += 1
-
-                if len(dm_arrays[sensor]) > entries_to_display:
-                    dm_arrays[sensor].pop(0)
-            
-
-            for sensor in vacuum_sensors_list:
-
-                
-                while splitline[i] == "" or splitline[i] == "\n" or splitline[i] == "\t":
-                    i += 1
-
-
-
-                vacuum_arrays[sensor].append(float(splitline[i]))
-                i += 1
-
-                if len(vacuum_arrays[sensor]) > entries_to_display:
-                    vacuum_arrays[sensor].pop(0)
+            except:
+                pass
 
 
 
