@@ -593,7 +593,12 @@ def main():
        initiate_frame()
 
     serial_repair_done_recently = True
-    
+
+
+    min_wattage = js.ReadJSONConfig("deposition","min_wattage")
+    max_wattage = js.ReadJSONConfig("deposition","max_wattage")
+    resistance = js.ReadJSONConfig("deposition","resistance")
+    last_hot_swap_time = datetime.datetime.now().timestamp()
 
 
     #------------------------------ infinite cycle --------------------------------------------
@@ -602,14 +607,29 @@ def main():
     while True:
 
         
-        if do_amperage:
+        if do_deposition_monitor and do_amperage and (datetime.datetime.now().timestamp() > 1 + last_hot_swap_time): # wattage and resistance hot swap
 
-            min_wattage = js.ReadJSONConfig("deposition","min_wattage")
-            max_wattage = js.ReadJSONConfig("deposition","max_wattage")
-            resistance = js.ReadJSONConfig("deposition","resistance")
+            try:
+                min_wattage = js.ReadJSONConfig("deposition","min_wattage")
+                max_wattage = js.ReadJSONConfig("deposition","max_wattage")
+                resistance = js.ReadJSONConfig("deposition","resistance")
 
+                last_hot_swap_time = datetime.datetime.now().timestamp()
+            except:
+                pass
+
+
+
+
+
+        if do_deposition_monitor:            
             deposition_monitor_output_vector = sm.ReadAllAnalogInputs()
+        else:
+            deposition_monitor_output_vector = []
             
+
+
+        if do_deposition_monitor and do_amperage:
 
             current = ((min_wattage * (10 - deposition_monitor_output_vector[0]) + max_wattage * deposition_monitor_output_vector[0]) / (10*resistance))**0.5
 
@@ -617,8 +637,12 @@ def main():
             #kps_2.write(f"CURR {}, @(1,2,3,4)")
 
 
-            amperage_output = []
+            
 
+
+
+        if do_amperage:
+            amperage_output = []
             for element in currently_processed_amperage_ports:
                 if element in [1,2,3,4]:
                     ret = kps_1.query(f"MEAS:CURR? (@{element})")
