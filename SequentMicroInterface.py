@@ -32,8 +32,11 @@ def RecordTemperatureToLog(current_temp, filename):
     
     #return temperaturearray
 
-def ReadVoltage(board_id, sensor_number):
-    ret = str(subprocess.run([f"megaind", f"{board_id}", f"uoutrd", f"{sensor_number}"], capture_output=True).stdout)
+def ReadVoltage(board_id, sensor_number, input_output_socket="uoutrd"):
+
+    assert input_output_socket == "uoutrd" or input_output_socket == "uinrd"
+
+    ret = str(subprocess.run([f"megaind", f"{board_id}", f"{input_output_socket}", f"{sensor_number}"], capture_output=True).stdout)
     ret = float(ret[2:(len(ret)-3)])
     
     return ret
@@ -46,7 +49,7 @@ def ReadAllPressures():
 
     for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_pressure_ports"):
 
-                    voltage = ReadVoltage((sensor_number//4),((sensor_number%4)+1))
+                    voltage = ReadVoltage((sensor_number//4),((sensor_number%4)+1),input_output_socket="uoutrd")
                     pressure = ((polynomes[sensor_number])[0])*voltage + ((polynomes[sensor_number])[1])
                     pressurearray.append(pressure)
                     ret = ret+"\t"+str(pressure)
@@ -63,7 +66,7 @@ def ReadAllAnalogInputs():
 
     for sensor_number in js.ReadJSONConfig("RTD_options","currently_processed_deposition_monitor_ports"):
 
-                    voltage = ReadVoltage((sensor_number//4),((sensor_number%4)+1))
+                    voltage = ReadVoltage((sensor_number//4),((sensor_number%4)+1),input_output_socket="uinrd")
                     voltagearray.append(voltage)
                     
     return voltagearray
