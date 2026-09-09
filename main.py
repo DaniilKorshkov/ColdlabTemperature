@@ -129,6 +129,8 @@ def temperature_update_frame(i):
 
     
     tempax.tick_params('x', labelrotation=90)
+    if do_admt_plot:
+        tempax.tick_params('x', labelbottom=False)
     
     temperaturelegend = []
 
@@ -249,6 +251,8 @@ def dm_update_frame(i):
 
     
     dmax.tick_params('x', labelrotation=90)
+    if do_admt_plot:
+        dmax.tick_params('x', labelbottom=False)
     
     dmlegend = []
 
@@ -376,15 +380,18 @@ def initiate_frame():
         vacax = vacfig.add_subplot(111)
         vacani = FuncAnimation(vacfig, vacuum_update_frame, interval=1000)
     
-    global admtfig, admtani
+    global admtfig, admtani, do_admt_plot
     if  do_amperage and do_deposition_monitor and do_temperature:
+        do_admt_plot = True
         admtfig = plt.figure()
 
-        tempax = admtfig.add_subplot(111)
-        dmax = admtfig.add_subplot(211)
-        ampax = admtfig.add_subplot(311)
+        tempax = admtfig.add_subplot(3,1,1)
+        dmax = admtfig.add_subplot(3,1,2)
+        ampax = admtfig.add_subplot(3,1,3)
 
         admtani = FuncAnimation(admtfig, admt_update_frame, interval = 1000)
+    if not (do_amperage and do_deposition_monitor and do_temperature):
+        do_admt_plot = False
 
     plt.show(block=False)
 
