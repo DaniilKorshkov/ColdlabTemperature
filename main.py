@@ -346,39 +346,38 @@ def admt_update_frame(i):
 def initiate_frame():
 
     
-
+    global tempfig, tempax, tempani
     if do_temperature and not(do_amperage and do_deposition_monitor and do_temperature):
-        global tempfig, tempax, tempani
         tempfig = plt.figure()
         tempax = tempfig.add_subplot(111)
         tempani = FuncAnimation(tempfig, temperature_update_frame, interval=1000)
 
+    global pressfig, pressax, pressani
     if do_pressure:
-        global pressfig, pressax, pressani
         pressfig = plt.figure()
         pressax = pressfig.add_subplot(111)
         pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
 
+    global ampfig, ampax, ampani
     if do_amperage and not(do_amperage and do_deposition_monitor and do_temperature):
-        global ampfig, ampax, ampani
         ampfig = plt.figure()
         ampax = ampfig.add_subplot(111)
         ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
 
+    global dmfig, dmax, dmani
     if do_deposition_monitor and not(do_amperage and do_deposition_monitor and do_temperature):
-        global dmfig, dmax, dmani
         dmfig = plt.figure()
         dmax = dmfig.add_subplot(111)
         dmani = FuncAnimation(dmfig, dm_update_frame, interval=1000)
 
+    global vacfig, vacax, vacani
     if do_vacuum:
-        global vacfig, vacax, vacani
         vacfig = plt.figure()
         vacax = vacfig.add_subplot(111)
         vacani = FuncAnimation(vacfig, vacuum_update_frame, interval=1000)
     
+    global admtfig, admtani
     if  do_amperage and do_deposition_monitor and do_temperature:
-        global admtfig, tempax, ampax, dmax, admtani
         admtfig = plt.figure()
 
         tempax = admtfig.add_subplot(111)
