@@ -336,12 +336,18 @@ def pressure_update_frame(i):
     pressax.legend(pressurelegend,loc=3)
 
 
+def admt_update_frame(i):
+    amperage_update_frame(i)
+    dm_update_frame(i)
+    temperature_update_frame(i)
+
+
 
 def initiate_frame():
 
     
 
-    if do_temperature:
+    if do_temperature and not(do_amperage and do_deposition_monitor and do_temperature):
         global tempfig, tempax, tempani
         tempfig = plt.figure()
         tempax = tempfig.add_subplot(111)
@@ -353,13 +359,13 @@ def initiate_frame():
         pressax = pressfig.add_subplot(111)
         pressani = FuncAnimation(pressfig, pressure_update_frame, interval=1000)
 
-    if do_amperage:
+    if do_amperage and not(do_amperage and do_deposition_monitor and do_temperature):
         global ampfig, ampax, ampani
         ampfig = plt.figure()
         ampax = ampfig.add_subplot(111)
         ampani = FuncAnimation(ampfig, amperage_update_frame, interval=1000)
 
-    if do_deposition_monitor:
+    if do_deposition_monitor and not(do_amperage and do_deposition_monitor and do_temperature):
         global dmfig, dmax, dmani
         dmfig = plt.figure()
         dmax = dmfig.add_subplot(111)
@@ -370,6 +376,16 @@ def initiate_frame():
         vacfig = plt.figure()
         vacax = vacfig.add_subplot(111)
         vacani = FuncAnimation(vacfig, vacuum_update_frame, interval=1000)
+    
+    if  do_amperage and do_deposition_monitor and do_temperature:
+        global admtfig, tempax, ampax, dmax, admtani
+        admtfig = plt.figure()
+
+        tempax = admtfig.add_subplot(111)
+        dmax = admtfig.add_subplot(211)
+        ampax = admtfig.add_subplot(311)
+
+        admtani = FuncAnimation(admtfig, admt_update_frame, interval = 1000)
 
     plt.show(block=False)
 
@@ -450,7 +466,7 @@ def main():
     else:
         do_vacuum = False
 
-    assert (do_amperage or do_pressure or do_temperature or do_vacuum)
+    assert (do_amperage or do_pressure or do_temperature or do_vacuum or do_deposition_monitor) # assert that at least one type of data is collected
 
     while True:
         inputline = str(input("Display graphs(y/n): "))
