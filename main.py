@@ -113,7 +113,8 @@ def temperature_update_frame(i):
     i = 0
 
 
-    tempax.set_xlabel(f'Time')
+    if not do_admt_plot:
+        tempax.set_xlabel(f'Time')
     tempax.set_ylabel("Temperature (°C)")
 
     tempax.set_xscale('linear')
@@ -234,8 +235,8 @@ def dm_update_frame(i):
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
-
-    dmax.set_xlabel(f'Time')
+    if not do_admt_plot:
+        dmax.set_xlabel(f'Time')
     dmax.set_ylabel("Deposition rate (%)")
 
     dmax.set_xscale('linear')
