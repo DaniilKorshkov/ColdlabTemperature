@@ -33,7 +33,7 @@ def MakeNewFile():
         do_pressure = False
         for sensor_number in js.ReadJSONConfig("RTD_options", "currently_processed_pressure_ports"):
             handle.write(f"Press. port {sensor_number}\t")
-            do_temperature = True
+            do_pressure = True
 
         if do_pressure:
             handle.write("\t")

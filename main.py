@@ -332,7 +332,7 @@ def pressure_update_frame(i):
                 pressurelegend.append(legend_dictionary[pressure_array_key])
         except:
             if len(pressure_arrays[pressure_array_key]) > 0:
-                temperaturelegend.append(f"{temperature_array_key}: {temperature_arrays[temperature_array_key][-1]} torr")
+                pressurelegend.append(f"{pressure_array_key}: {pressure_arrays[pressure_array_key][-1]} torr")
             else:
                 pressurelegend.append(pressure_array_key)
         i += 1
