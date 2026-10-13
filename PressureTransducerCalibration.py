@@ -17,23 +17,27 @@ def main():
                         channels.append(element.strip("\n"))
             
             else:
-                channel_counter = 0
+                element_counter = 0
                 splitline = line.split("\t")
                 
-                try:
-                    pressure_arrays_dictionary[channels[channel_counter]].append(float(splitline[channel_counter]  ))
-                except:
-                    pressure_arrays_dictionary[channels[channel_counter]] = []
-                    pressure_arrays_dictionary[channels[channel_counter]].append(float(splitline[channel_counter]  ))
+                for element in splitline:
+                    if element_counter%2 == 0:
+                        try:
+                            pressure_arrays_dictionary[channels[int(element_counter/2)]].append(float(splitline[element_counter]  ))
+                        except:
+                            pressure_arrays_dictionary[channels[int(element_counter/2)]] = []
+                            pressure_arrays_dictionary[channels[int(element_counter/2)]].append(float(splitline[element_counter]  ))
 
-                try:
-                    voltage_arrays_dictionary[channels[channel_counter]].append(float(splitline[channel_counter+1]  ))
-                except:
-                    voltage_arrays_dictionary[channels[channel_counter]] = []
-                    voltage_arrays_dictionary[channels[channel_counter]].append(float(splitline[channel_counter+1]  ))
-                
 
-                channel_counter+=1
+                    else:
+                        try:
+                            voltage_arrays_dictionary[channels[int(element_counter/2)]].append(float(splitline[element_counter]  ))
+                        except:
+                            voltage_arrays_dictionary[channels[int(element_counter/2)]] = []
+                            voltage_arrays_dictionary[channels[int(element_counter/2)]].append(float(splitline[element_counter]  ))
+                    
+
+                    element_counter+=1
 
 
     print(channels)
