@@ -294,13 +294,13 @@ def pressure_update_frame(i):
     pressax.cla()
     #pressax.clear()
 
-    pressax.set_title(f"Pressure (torr vs time)")
+    pressax.set_title(f"Pressure (PSI vs time)")
     colorlist = ['r','g','b','c','m','y','k','tab:brown']
     i = 0
 
 
     pressax.set_xlabel(f'Time')
-    pressax.set_ylabel("Pressure (torr)")
+    pressax.set_ylabel("Pressure (PSI)")
 
     pressax.set_xscale('linear')
     pressax.set_yscale('linear')
@@ -327,12 +327,12 @@ def pressure_update_frame(i):
         pressax.plot(time_array, pressure_arrays[pressure_array_key], color = colorlist[i])
         try:
             if len(pressure_arrays[pressure_array_key]) > 0:
-                pressurelegend.append(f"{legend_dictionary[pressure_array_key]}: {pressure_arrays[pressure_array_key][-1]} torr")
+                pressurelegend.append(f"{legend_dictionary[pressure_array_key]}: {pressure_arrays[pressure_array_key][-1]} PSI")
             else:
                 pressurelegend.append(legend_dictionary[pressure_array_key])
         except:
             if len(pressure_arrays[pressure_array_key]) > 0:
-                pressurelegend.append(f"{pressure_array_key}: {pressure_arrays[pressure_array_key][-1]} torr")
+                pressurelegend.append(f"{pressure_array_key}: {pressure_arrays[pressure_array_key][-1]} PSI")
             else:
                 pressurelegend.append(pressure_array_key)
         i += 1
